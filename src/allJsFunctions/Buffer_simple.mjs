@@ -1,7 +1,4 @@
 import { GEOSFunctions } from "../allCFunctions.mjs";
-// import { geojsonToPointers, pointersToGeojson } from "../helpers/geojson.mjs";
-import GEOSGeomFromGeoJSON from './GeoJSONReader.mjs';
-import GEOSGeomToGeoJSON from './GeoJSONWriter.mjs';
 
 export default function buffer(geojson, radius, options = {}) {
   const {
@@ -33,7 +30,9 @@ export default function buffer(geojson, radius, options = {}) {
     }
   }
   // create a GEOS object from the GeoJSON
-  const geomPtr = GEOSGeomFromGeoJSON(geojson);
+  const readerPtr = GEOSFunctions.GEOSGeoJSONReader_create();
+  const geomPtr = GEOSFunctions.GEOSGeoJSONReader_readGeometry(readerPtr, geojson);
+  GEOSFunctions.GEOSGeoJSONReader_destroy(readerPtr);
   // create a buffer
   let bufferPtr = null
   if (isBufferWithParams) {
@@ -46,6 +45,9 @@ export default function buffer(geojson, radius, options = {}) {
     GEOSFunctions.GEOSBufferParams_destroy(bufferParamsPtr);
   }
   // update the original GeoJSON with the new geometry
-  const bufferGeojson = GEOSGeomToGeoJSON(bufferPtr);
+  const writerPtr = GEOSFunctions.GEOSGeoJSONWriter_create();
+  const bufferGeojson = GEOSFunctions.GEOSGeoJSONWriter_writeGeometry(writerPtr, bufferPtr);
+  GEOSFunctions.GEOSGeoJSONWriter_destroy(writerPtr);
+  GEOSFunctions.GEOSGeom_destroy(bufferPtr);
   return bufferGeojson;
 }

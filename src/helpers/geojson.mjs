@@ -1,6 +1,5 @@
 import { stringify, parse } from "wkt";
-import GEOSGeomFromWKT from "../allJsFunctions/GeomFromWKT.mjs";
-import GEOSGeomToWKT from "../allJsFunctions/GeomToWKT.mjs";
+import { GEOSFunctions } from "../allCFunctions.mjs";
 
 export function geojsonToPointers(geojson) {
   const pointers = [];
@@ -33,13 +32,13 @@ export function pointersToGeojson(pointers, geojson) {
 function geometryToPointer(geometry) {
   // convert feature to WKT
   const wkt = stringify(geometry);
-  const geomPtr = GEOSGeomFromWKT(wkt);
+  const geomPtr = GEOSFunctions.GEOSGeomFromWKT(wkt);
   return geomPtr;
 }
 
 function pointerToFeature(pointer, feature) {
   // read WKT from pointer
-  const wkt = GEOSGeomToWKT(pointer);
+  const wkt = GEOSFunctions.GEOSGeomToWKT(pointer);
   // convert WKT to GeoJSON
   const geometry = parse(wkt);
   // update the original GeoJSON with the new geometry

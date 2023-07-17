@@ -23,13 +23,21 @@ GEOS_EMCC_FLAGS += -s RESERVED_FUNCTION_POINTERS=200
 # GEOS_EMCC_FLAGS += -s LINKABLE=1 -s EXPORT_ALL=1
 GEOS_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
   '_malloc',\
+	'_free',\
 	'_initGEOS',\
+  '_finishGEOS',\
   '_GEOSFree', \
   '_GEOSGeomFromWKB_buf',\
   '_GEOSGeomToWKB_buf',\
 	'_GEOSGeomFromWKT',\
   '_GEOSGeomToWKT',\
-  '_GEOSBuffer', \
+  '_GEOSGeoJSONReader_create',\
+  '_GEOSGeoJSONReader_destroy',\
+  '_GEOSGeoJSONReader_readGeometry',\
+  '_GEOSGeoJSONWriter_create',\
+  '_GEOSGeoJSONWriter_destroy',\
+  '_GEOSGeoJSONWriter_writeGeometry',\
+  '_GEOSBuffer',\
   '_GEOSBufferParams_create',\
   '_GEOSBufferParams_destroy',\
   '_GEOSBufferParams_setEndCapStyle',\
@@ -38,14 +46,7 @@ GEOS_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
   '_GEOSBufferParams_setQuadrantSegments',\
   '_GEOSBufferParams_setSingleSided',\
   '_GEOSBufferWithParams',\
-  '_GEOSGeom_destroy', \
-  '_finishGEOS',\
-  '_GEOSGeoJSONReader_create',\
-  '_GEOSGeoJSONReader_destroy',\
-  '_GEOSGeoJSONReader_readGeometry',\
-  '_GEOSGeoJSONWriter_create',\
-  '_GEOSGeoJSONWriter_destroy',\
-  '_GEOSGeoJSONWriter_writeGeometry'\
+  '_GEOSGeom_destroy'\
 ]"
 
 GEOS_EMCC_FLAGS += -s EXPORTED_RUNTIME_METHODS="[\
@@ -54,5 +55,6 @@ GEOS_EMCC_FLAGS += -s EXPORTED_RUNTIME_METHODS="[\
   'ccall',\
   'cwrap',\
   'UTF8ToString',\
-  'stringToUTF8'\
+  'stringToUTF8',\
+	'lengthBytesUTF8'\
 ]"

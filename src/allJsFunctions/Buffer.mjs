@@ -24,8 +24,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 import { GEOSFunctions } from "../allCFunctions.mjs";
-import GEOSGeomToWKB from "./GeomToWKB.mjs";
-import GEOSGeomFromWKB from "./GeomFromWKB.mjs";
 import center from "@turf/center";
 import { geomEach, featureEach } from "@turf/meta";
 import { geoAzimuthalEquidistant } from "d3-geo";
@@ -203,7 +201,7 @@ function bufferFeature(geojson, radius, units, steps, endCapStyle, joinStyle, mi
   // geojsonToPointers always returns an array of pointers
   // const geomPtr = GEOSGeomFromWKT(stringify(projected));
   const wkb = Geometry.parseGeoJSON(projected).toWkb()
-  const geomPtr = GEOSGeomFromWKB(wkb);
+  const geomPtr = GEOSFunctions.GEOSGeomFromWKB(wkb);
   const distance = radiansToLength(lengthToRadians(radius, units), "meters");
   let bufferPtr;
   if (isBufferWithParams) {
@@ -216,7 +214,7 @@ function bufferFeature(geojson, radius, units, steps, endCapStyle, joinStyle, mi
     GEOSFunctions.GEOSBufferParams_destroy(bufferParamsPtr);
   }
   // update the original GeoJSON with the new geometry
-  const bufferedWkb = GEOSGeomToWKB(bufferPtr);
+  const bufferedWkb = GEOSFunctions.GEOSGeomToWKB(bufferPtr);
   const buffered = Geometry.parse(bufferedWkb).toGeoJSON();
   // destroy the GEOS objects
   GEOSFunctions.GEOSGeom_destroy(geomPtr);
