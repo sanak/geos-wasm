@@ -10,6 +10,9 @@ TODO.md
 # Created by https://www.gitignore.io/api/node,linux,macos,windows,webstorm,sublimetext,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,linux,macos,windows,webstorm,sublimetext,visualstudiocode
 
+### asdf ###
+/.tool-versions
+
 ### Linux ###
 *~
 
@@ -197,6 +200,7 @@ GitHub.sublime-settings
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+*.code-workspace
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
