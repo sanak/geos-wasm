@@ -5,7 +5,7 @@ export const GEOSFunctions = {
 export function initCFunctions() {
   if (GEOSFunctions.initGEOS) return;
   const Module = GEOSFunctions.Module;
-  
+
   Module.ccall('initGEOS', null, ['string', 'string'], ['GEOS_INIT_NOTICE=NO', 'GEOS_ENABLE_TESTS=NO']);
 
   GEOSFunctions.initGEOS = Module.cwrap('initGEOS', null, ['string', 'string']);
@@ -23,7 +23,7 @@ export function initCFunctions() {
   GEOSFunctions.GEOSBufferParams_setQuadrantSegments = Module.cwrap('GEOSBufferParams_setQuadrantSegments', null, ["number"]);
   GEOSFunctions.GEOSBufferParams_setSingleSided = Module.cwrap('GEOSBufferParams_setSingleSided', null, ["boolean"]);
   GEOSFunctions.GEOSFree = Module.cwrap('GEOSFree', null, ['number']);
-  GEOSFunctions.GEOSGeom_destroy = Module.cwrap('GEOSGeom_destroy', null, ['number']);  
+  GEOSFunctions.GEOSGeom_destroy = Module.cwrap('GEOSGeom_destroy', null, ['number']);
   GEOSFunctions.GEOSGeoJSONReader_create = Module.cwrap('GEOSGeoJSONReader_create', 'number', [null]);
   GEOSFunctions.GEOSGeoJSONReader_destroy = Module.cwrap('GEOSGeoJSONReader_destroy', null, ['number']);
   GEOSFunctions.GEOSGeoJSONReader_readGeometry = Module.cwrap('GEOSGeoJSONReader_readGeometry', 'number', ['number', 'number']);

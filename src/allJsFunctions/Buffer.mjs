@@ -1,5 +1,5 @@
 /*
-Most of the code in this file is copied from Turf.js, 
+Most of the code in this file is copied from Turf.js,
 with some modifications to make it work with GEOS instead of JSTS.
 
 The MIT License (MIT)
@@ -200,7 +200,7 @@ function bufferFeature(geojson, radius, units, steps, endCapStyle, joinStyle, mi
     }
   }
   // create a GEOS object from the GeoJSON
-  // geojsonToPointers always returns an array of pointers  
+  // geojsonToPointers always returns an array of pointers
   // const geomPtr = GEOSGeomFromWKT(stringify(projected));
   const wkb = Geometry.parseGeoJSON(projected).toWkb()
   const geomPtr = GEOSGeomFromWKB(wkb);
@@ -210,17 +210,17 @@ function bufferFeature(geojson, radius, units, steps, endCapStyle, joinStyle, mi
     bufferPtr = GEOSFunctions.GEOSBufferWithParams(geomPtr, bufferParamsPtr, distance);
   } else {
     bufferPtr = GEOSFunctions.GEOSBuffer(geomPtr, distance, steps);
-  }  
+  }
   // destroy the bufferParamsPtr if it exists
   if (bufferParamsPtr) {
     GEOSFunctions.GEOSBufferParams_destroy(bufferParamsPtr);
   }
   // update the original GeoJSON with the new geometry
-  const bufferedWkb = GEOSGeomToWKB(bufferPtr);  
+  const bufferedWkb = GEOSGeomToWKB(bufferPtr);
   const buffered = Geometry.parse(bufferedWkb).toGeoJSON();
   // destroy the GEOS objects
   GEOSFunctions.GEOSGeom_destroy(geomPtr);
-  GEOSFunctions.GEOSGeom_destroy(bufferPtr);  
+  GEOSFunctions.GEOSGeom_destroy(bufferPtr);
 
   // Detect if empty geometries
   if (coordsIsNaN(buffered.coordinates)) return undefined;

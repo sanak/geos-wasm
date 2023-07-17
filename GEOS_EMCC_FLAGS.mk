@@ -20,7 +20,7 @@ GEOS_EMCC_FLAGS += -s RESERVED_FUNCTION_POINTERS=200
 # Enable the next line to export all functions,
 # make sure to disable the EXPORTED_FUNCTIONS array below
 # when doing so.
-# GEOS_EMCC_FLAGS += -s LINKABLE=1 -s EXPORT_ALL=1 
+# GEOS_EMCC_FLAGS += -s LINKABLE=1 -s EXPORT_ALL=1
 GEOS_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
   '_malloc',\
 	'_initGEOS',\

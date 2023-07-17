@@ -21,7 +21,7 @@ export default function initGeosJs(
 
     Module.onRuntimeInitialized = function onRuntimeInitialized() {
       try {
-        initCFunctions();        
+        initCFunctions();
       } catch (error) {
         console.log('error initializing geos.js', error);
       }
@@ -32,10 +32,10 @@ export default function initGeosJs(
       GEOSFunctions.finishGEOS();
     }
 
-    
+
     Module.locateFile = config.locateFile;
-    
-    CModule(GEOSFunctions.Module).then((res) => {      
+
+    CModule(GEOSFunctions.Module).then((res) => {
       resolve(allJsFunctions);
     });
   });

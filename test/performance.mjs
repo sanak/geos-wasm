@@ -35,7 +35,7 @@ const runs = 100;
 function runPerformanceTest(inputGeometry, numIterations, bufferSingleFeatures = false) {
   // Measure the performance of the GEOS buffer method
   const geosBufferStart = performance.now();
-  for (let i = 0; i < numIterations; i++) { 
+  for (let i = 0; i < numIterations; i++) {
     if (bufferSingleFeatures) {
       inputGeometry.features.forEach((feature) => {
         geos.buffer(feature, bufferDistance, { units: 'degrees' });
@@ -124,7 +124,7 @@ console.log('Real life performance test');
 // and buffer them by 1km
 const nuts3 = await fetch('https://ec.europa.eu/eurostat/cache/GISCO/distribution/v2/nuts/geojson/NUTS_RG_10M_2021_4326_LEVL_3.geojson').then(res => res.json());
 
-// we try 2 tests: 
+// we try 2 tests:
 // 1. buffer all geometries at once
 console.log('Buffering all geometries at once');
 runPerformanceTest(nuts3, 1);

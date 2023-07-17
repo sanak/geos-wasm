@@ -1,7 +1,7 @@
 import { GEOSFunctions } from "../allCFunctions.mjs";
 
 export default function GeosGeomToWKB(geomPtr) {
-  // create a pointer that stores the GEOSGeomToWKB_buf length 
+  // create a pointer that stores the GEOSGeomToWKB_buf length
   const wkbPtrLength = GEOSFunctions.Module._malloc(4);
   // set it to 0
   GEOSFunctions.Module.setValue(wkbPtrLength, 0, 'i32');
@@ -14,7 +14,7 @@ export default function GeosGeomToWKB(geomPtr) {
     GEOSFunctions.Module.HEAPU8.buffer,
     wkbPtr,
     size
-  );    
+  );
   const wkb = new Uint8Array(wkbView);
 
   // free the memory
