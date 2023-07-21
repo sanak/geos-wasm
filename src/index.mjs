@@ -22,6 +22,7 @@ export default function initGeosJs(
     Module.onRuntimeInitialized = function onRuntimeInitialized() {
       try {
         initCFunctions();
+        GEOSFunctions.init();
       } catch (error) {
         console.log('error initializing geos.js', error);
       }
@@ -29,7 +30,7 @@ export default function initGeosJs(
 
     Module.destroy = function destroy() {
       /* Clean up the global context */
-      GEOSFunctions.finishGEOS();
+      GEOSFunctions.finish();
     }
 
 

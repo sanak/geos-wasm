@@ -12,42 +12,42 @@ export default function buffer(geojson, radius, options = {}) {
   const isBufferWithParams = endCapStyle || joinStyle || mitreLimit || singleSided;
   let bufferParamsPtr;
   if (isBufferWithParams) {
-    bufferParamsPtr = GEOSFunctions.GEOSBufferParams_create();
+    bufferParamsPtr = GEOSFunctions.BufferParams_create();
     if (endCapStyle) {
-      GEOSFunctions.GEOSBufferParams_setEndCapStyle(bufferParamsPtr, endCapStyle);
+      GEOSFunctions.BufferParams_setEndCapStyle(bufferParamsPtr, endCapStyle);
     }
     if (joinStyle) {
-      GEOSFunctions.GEOSBufferParams_setJoinStyle(bufferParamsPtr, joinStyle);
+      GEOSFunctions.BufferParams_setJoinStyle(bufferParamsPtr, joinStyle);
     }
     if (mitreLimit) {
-      GEOSFunctions.GEOSBufferParams_setMitreLimit(bufferParamsPtr, mitreLimit);
+      GEOSFunctions.BufferParams_setMitreLimit(bufferParamsPtr, mitreLimit);
     }
     if (quadrantSegments) {
-      GEOSFunctions.GEOSBufferParams_setQuadrantSegments(bufferParamsPtr, quadrantSegments);
+      GEOSFunctions.BufferParams_setQuadrantSegments(bufferParamsPtr, quadrantSegments);
     }
     if (singleSided) {
-      GEOSFunctions.GEOSBufferParams_setSingleSided(bufferParamsPtr, singleSided);
+      GEOSFunctions.BufferParams_setSingleSided(bufferParamsPtr, singleSided);
     }
   }
   // create a GEOS object from the GeoJSON
-  const readerPtr = GEOSFunctions.GEOSGeoJSONReader_create();
-  const geomPtr = GEOSFunctions.GEOSGeoJSONReader_readGeometry(readerPtr, geojson);
-  GEOSFunctions.GEOSGeoJSONReader_destroy(readerPtr);
+  const readerPtr = GEOSFunctions.GeoJSONReader_create();
+  const geomPtr = GEOSFunctions.GeoJSONReader_readGeometry(readerPtr, geojson);
+  GEOSFunctions.GeoJSONReader_destroy(readerPtr);
   // create a buffer
   let bufferPtr = null
   if (isBufferWithParams) {
-    bufferPtr = GEOSFunctions.GEOSBufferWithParams(geomPtr, bufferParamsPtr, radius);
+    bufferPtr = GEOSFunctions.BufferWithParams(geomPtr, bufferParamsPtr, radius);
   } else {
-    bufferPtr = GEOSFunctions.GEOSBuffer(geomPtr, radius, quadrantSegments);
+    bufferPtr = GEOSFunctions.Buffer(geomPtr, radius, quadrantSegments);
   }
   // destroy the bufferParamsPtr if it exists
   if (bufferParamsPtr) {
-    GEOSFunctions.GEOSBufferParams_destroy(bufferParamsPtr);
+    GEOSFunctions.BufferParams_destroy(bufferParamsPtr);
   }
   // update the original GeoJSON with the new geometry
-  const writerPtr = GEOSFunctions.GEOSGeoJSONWriter_create();
-  const bufferGeojson = GEOSFunctions.GEOSGeoJSONWriter_writeGeometry(writerPtr, bufferPtr);
-  GEOSFunctions.GEOSGeoJSONWriter_destroy(writerPtr);
-  GEOSFunctions.GEOSGeom_destroy(bufferPtr);
+  const writerPtr = GEOSFunctions.GeoJSONWriter_create();
+  const bufferGeojson = GEOSFunctions.GeoJSONWriter_writeGeometry(writerPtr, bufferPtr);
+  GEOSFunctions.GeoJSONWriter_destroy(writerPtr);
+  GEOSFunctions.Geom_destroy(bufferPtr);
   return bufferGeojson;
 }

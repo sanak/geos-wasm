@@ -180,45 +180,45 @@ function bufferFeature(geojson, radius, units, steps, endCapStyle, joinStyle, mi
   const isBufferWithParams = endCapStyle || joinStyle || mitreLimit || singleSided;
   let bufferParamsPtr;
   if (isBufferWithParams) {
-    bufferParamsPtr = GEOSFunctions.GEOSBufferParams_create();
+    bufferParamsPtr = GEOSFunctions.BufferParams_create();
     if (endCapStyle) {
-      GEOSFunctions.GEOSBufferParams_setEndCapStyle(bufferParamsPtr, endCapStyle);
+      GEOSFunctions.BufferParams_setEndCapStyle(bufferParamsPtr, endCapStyle);
     }
     if (joinStyle) {
-      GEOSFunctions.GEOSBufferParams_setJoinStyle(bufferParamsPtr, joinStyle);
+      GEOSFunctions.BufferParams_setJoinStyle(bufferParamsPtr, joinStyle);
     }
     if (mitreLimit) {
-      GEOSFunctions.GEOSBufferParams_setMitreLimit(bufferParamsPtr, mitreLimit);
+      GEOSFunctions.BufferParams_setMitreLimit(bufferParamsPtr, mitreLimit);
     }
     if (steps) {
-      GEOSFunctions.GEOSBufferParams_setQuadrantSegments(bufferParamsPtr, steps);
+      GEOSFunctions.BufferParams_setQuadrantSegments(bufferParamsPtr, steps);
     }
     if (singleSided) {
-      GEOSFunctions.GEOSBufferParams_setSingleSided(bufferParamsPtr, singleSided);
+      GEOSFunctions.BufferParams_setSingleSided(bufferParamsPtr, singleSided);
     }
   }
   // create a GEOS object from the GeoJSON
   // geojsonToPointers always returns an array of pointers
   // const geomPtr = GEOSGeomFromWKT(stringify(projected));
   const wkb = Geometry.parseGeoJSON(projected).toWkb()
-  const geomPtr = GEOSFunctions.GEOSGeomFromWKB(wkb);
+  const geomPtr = GEOSFunctions.GeomFromWKB(wkb);
   const distance = radiansToLength(lengthToRadians(radius, units), "meters");
   let bufferPtr;
   if (isBufferWithParams) {
-    bufferPtr = GEOSFunctions.GEOSBufferWithParams(geomPtr, bufferParamsPtr, distance);
+    bufferPtr = GEOSFunctions.BufferWithParams(geomPtr, bufferParamsPtr, distance);
   } else {
-    bufferPtr = GEOSFunctions.GEOSBuffer(geomPtr, distance, steps);
+    bufferPtr = GEOSFunctions.Buffer(geomPtr, distance, steps);
   }
   // destroy the bufferParamsPtr if it exists
   if (bufferParamsPtr) {
-    GEOSFunctions.GEOSBufferParams_destroy(bufferParamsPtr);
+    GEOSFunctions.BufferParams_destroy(bufferParamsPtr);
   }
   // update the original GeoJSON with the new geometry
-  const bufferedWkb = GEOSFunctions.GEOSGeomToWKB(bufferPtr);
+  const bufferedWkb = GEOSFunctions.GeomToWKB(bufferPtr);
   const buffered = Geometry.parse(bufferedWkb).toGeoJSON();
   // destroy the GEOS objects
-  GEOSFunctions.GEOSGeom_destroy(geomPtr);
-  GEOSFunctions.GEOSGeom_destroy(bufferPtr);
+  GEOSFunctions.Geom_destroy(geomPtr);
+  GEOSFunctions.Geom_destroy(bufferPtr);
 
   // Detect if empty geometries
   if (coordsIsNaN(buffered.coordinates)) return undefined;

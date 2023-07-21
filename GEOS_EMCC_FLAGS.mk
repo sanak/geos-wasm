@@ -24,29 +24,29 @@ GEOS_EMCC_FLAGS += -s RESERVED_FUNCTION_POINTERS=200
 GEOS_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
 	'_malloc',\
 	'_free',\
-	'_initGEOS',\
-	'_finishGEOS',\
-	'_GEOSFree', \
-	'_GEOSGeomFromWKB_buf',\
-	'_GEOSGeomToWKB_buf',\
-	'_GEOSGeomFromWKT',\
-	'_GEOSGeomToWKT',\
-	'_GEOSGeoJSONReader_create',\
-	'_GEOSGeoJSONReader_destroy',\
-	'_GEOSGeoJSONReader_readGeometry',\
-	'_GEOSGeoJSONWriter_create',\
-	'_GEOSGeoJSONWriter_destroy',\
-	'_GEOSGeoJSONWriter_writeGeometry',\
-	'_GEOSBuffer',\
-	'_GEOSBufferParams_create',\
-	'_GEOSBufferParams_destroy',\
-	'_GEOSBufferParams_setEndCapStyle',\
-	'_GEOSBufferParams_setJoinStyle',\
-	'_GEOSBufferParams_setMitreLimit',\
-	'_GEOSBufferParams_setQuadrantSegments',\
-	'_GEOSBufferParams_setSingleSided',\
-	'_GEOSBufferWithParams',\
-	'_GEOSGeom_destroy'\
+	'_GEOS_init_r',\
+	'_GEOS_finish_r',\
+	'_GEOSFree_r', \
+	'_GEOSGeomFromWKB_buf_r',\
+	'_GEOSGeomToWKB_buf_r',\
+	'_GEOSGeomFromWKT_r',\
+	'_GEOSGeomToWKT_r',\
+	'_GEOSGeoJSONReader_create_r',\
+	'_GEOSGeoJSONReader_destroy_r',\
+	'_GEOSGeoJSONReader_readGeometry_r',\
+	'_GEOSGeoJSONWriter_create_r',\
+	'_GEOSGeoJSONWriter_destroy_r',\
+	'_GEOSGeoJSONWriter_writeGeometry_r',\
+	'_GEOSBuffer_r',\
+	'_GEOSBufferParams_create_r',\
+	'_GEOSBufferParams_destroy_r',\
+	'_GEOSBufferParams_setEndCapStyle_r',\
+	'_GEOSBufferParams_setJoinStyle_r',\
+	'_GEOSBufferParams_setMitreLimit_r',\
+	'_GEOSBufferParams_setQuadrantSegments_r',\
+	'_GEOSBufferParams_setSingleSided_r',\
+	'_GEOSBufferWithParams_r',\
+	'_GEOSGeom_destroy_r'\
 ]"
 
 GEOS_EMCC_FLAGS += -s EXPORTED_RUNTIME_METHODS="[\
