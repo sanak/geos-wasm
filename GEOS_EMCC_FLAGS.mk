@@ -15,7 +15,7 @@ GEOS_EMCC_FLAGS += -lworkerfs.js
 GEOS_EMCC_FLAGS += -lnodefs.js
 GEOS_EMCC_FLAGS += -s TOTAL_MEMORY=512MB -s ALLOW_MEMORY_GROWTH=1 -s DISABLE_EXCEPTION_CATCHING=0
 GEOS_EMCC_FLAGS += -s WASM=1 -s EXPORT_ES6=1 -s MODULARIZE=1 -s 'EXPORT_NAME="CModule"'
-GEOS_EMCC_FLAGS += -s RESERVED_FUNCTION_POINTERS=200
+GEOS_EMCC_FLAGS += -s RESERVED_FUNCTION_POINTERS=200 -s ALLOW_TABLE_GROWTH=1
 
 # Enable the next line to export all functions,
 # make sure to disable the EXPORTED_FUNCTIONS array below
@@ -25,6 +25,8 @@ GEOS_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
 	'_malloc',\
 	'_free',\
 	'_GEOS_init_r',\
+	'_GEOSContext_setNoticeMessageHandler_r',\
+	'_GEOSContext_setErrorMessageHandler_r',\
 	'_GEOS_finish_r',\
 	'_GEOSFree_r', \
 	'_GEOSGeomFromWKB_buf_r',\
@@ -56,5 +58,7 @@ GEOS_EMCC_FLAGS += -s EXPORTED_RUNTIME_METHODS="[\
 	'cwrap',\
 	'UTF8ToString',\
 	'stringToUTF8',\
-	'lengthBytesUTF8'\
+	'lengthBytesUTF8',\
+	'addFunction',\
+	'removeFunction'\
 ]"

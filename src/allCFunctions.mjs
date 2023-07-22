@@ -1,7 +1,7 @@
 export const GEOSFunctions = {
   handle: null,
   last_error: null,
-  last_warning: null,
+  last_notice: null,
   Module: {},
 };
 
@@ -12,13 +12,29 @@ export function initCFunctions() {
   GEOSFunctions.init = function() {
     GEOSFunctions.handle = Module.ccall('GEOS_init_r', null, [null], []);
     GEOSFunctions.last_error = Module._malloc(1025);
-    GEOSFunctions.last_warning = Module._malloc(1025);
+    Module.setValue(GEOSFunctions.last_error, 0, 'i8');
+    GEOSFunctions.last_notice = Module._malloc(1025);
+    Module.setValue(GEOSFunctions.last_notice, 0, 'i8');
+  }
+  GEOSFunctions.setErrorMessageHandler = function(errorFunc) {
+    const funcPtr = Module.addFunction(errorFunc, 'vii');
+    return Module.ccall('GEOSContext_setErrorMessageHandler_r', 'number', ['number', 'number', 'number'], [GEOSFunctions.handle, funcPtr, GEOSFunctions.last_error]);
+  }
+  GEOSFunctions.setNoticeMessageHandler = function(noticeFunc) {
+    const funcPtr = Module.addFunction(noticeFunc, 'vii');
+    return Module.ccall('GEOSContext_setNoticeMessageHandler_r', 'number', ['number', 'number', 'number'], [GEOSFunctions.handle, funcPtr, GEOSFunctions.last_notice]);
+  }
+  GEOSFunctions.getLastErrorMessage = function() {
+    return Module.UTF8ToString(GEOSFunctions.last_error);
+  }
+  GEOSFunctions.getLastNoticeMessage = function() {
+    return Module.UTF8ToString(GEOSFunctions.last_notice);
   }
   GEOSFunctions.finish = function(handle) {
     Module.ccall('GEOS_finish_r', null, ['number'], [handle]);
     GEOSFunctions.handle = null;
     Module._free(GEOSFunctions.last_error);
-    Module._free(GEOSFunctions.last_warning);
+    Module._free(GEOSFunctions.last_notice);
   }
   GEOSFunctions.Free = function(ptr) {
     Module.ccall('GEOSFree_r', null, ['number', 'number'], [GEOSFunctions.handle, ptr]);
