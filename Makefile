@@ -50,7 +50,7 @@ $(GEOS_SRC)/build/Makefile: $(GEOS_SRC)/CMakeLists.txt
 	mkdir build; \
 	cd build; \
 	$(EMCMAKE) cmake .. $(PREFIX_CMAKE) -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF \
-        -DCMAKE_PREFIX_PATH=$(ROOT_DIR) -DCMAKE_FIND_ROOT_PATH=$(ROOT_DIR) \
+        -DCMAKE_PREFIX_PATH=$(ROOT_DIR) -DCMAKE_FIND_ROOT_PATH=$(ROOT_DIR);
 
 $(GEOS_SRC)/CMakeLists.txt:
 	mkdir -p $(SRC_DIR); \
