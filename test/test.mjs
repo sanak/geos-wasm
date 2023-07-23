@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "fs/promises";
-// import initGeosJs from '../src/index.mjs';
-import initGeosJs from '../build/package/geos.esm.js';
+import initGeosJs from '../src/index.mjs';
+// import initGeosJs from '../build/package/geos.esm.js';
 import * as turf from '@turf/turf';
 
 const { buffer, buffer_simple } = await initGeosJs();
