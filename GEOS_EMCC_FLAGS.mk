@@ -25,20 +25,14 @@ GEOS_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
 	'_malloc',\
 	'_free',\
 	'_GEOS_init_r',\
+	'_GEOS_finish_r',\
 	'_GEOSContext_setNoticeMessageHandler_r',\
 	'_GEOSContext_setErrorMessageHandler_r',\
-	'_GEOS_finish_r',\
-	'_GEOSFree_r', \
-	'_GEOSGeomFromWKB_buf_r',\
-	'_GEOSGeomToWKB_buf_r',\
-	'_GEOSGeomFromWKT_r',\
-	'_GEOSGeomToWKT_r',\
-	'_GEOSGeoJSONReader_create_r',\
-	'_GEOSGeoJSONReader_destroy_r',\
-	'_GEOSGeoJSONReader_readGeometry_r',\
-	'_GEOSGeoJSONWriter_create_r',\
-	'_GEOSGeoJSONWriter_destroy_r',\
-	'_GEOSGeoJSONWriter_writeGeometry_r',\
+	'_GEOSCoordSeq_create_r',\
+	'_GEOSCoordSeq_copyFromBuffer_r',\
+	'_GEOSCoordSeq_copyToBuffer_r',\
+	'_GEOSCoordSeq_destroy_r',\
+	'_GEOSCoordSeq_getSize_r',\
 	'_GEOSBuffer_r',\
 	'_GEOSBufferParams_create_r',\
 	'_GEOSBufferParams_destroy_r',\
@@ -48,7 +42,38 @@ GEOS_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
 	'_GEOSBufferParams_setQuadrantSegments_r',\
 	'_GEOSBufferParams_setSingleSided_r',\
 	'_GEOSBufferWithParams_r',\
-	'_GEOSGeom_destroy_r'\
+	'_GEOSGeom_createPoint_r',\
+	'_GEOSGeom_createEmptyPoint_r',\
+	'_GEOSGeom_createLinearRing_r',\
+	'_GEOSGeom_createLineString_r',\
+	'_GEOSGeom_createEmptyPolygon_r',\
+	'_GEOSGeom_createPolygon_r',\
+	'_GEOSGeom_createCollection_r',\
+	'_GEOSGeom_createEmptyCollection_r',\
+	'_GEOSGeom_clone_r',\
+	'_GEOSGeom_destroy_r',\
+	'_GEOSEquals_r',\
+	'_GEOSEqualsExact_r',\
+	'_GEOSisEmpty_r',\
+	'_GEOSGeomTypeId_r',\
+	'_GEOSGetNumGeometries_r',\
+	'_GEOSGetGeometryN_r',\
+	'_GEOSGetNumInteriorRings_r',\
+	'_GEOSGetInteriorRingN_r',\
+	'_GEOSGetExteriorRing_r',\
+	'_GEOSGetNumCoordinates_r',\
+	'_GEOSGeom_getCoordSeq_r',\
+	'_GEOSGeoJSONReader_create_r',\
+	'_GEOSGeoJSONReader_destroy_r',\
+	'_GEOSGeoJSONReader_readGeometry_r',\
+	'_GEOSGeoJSONWriter_create_r',\
+	'_GEOSGeoJSONWriter_destroy_r',\
+	'_GEOSGeoJSONWriter_writeGeometry_r',\
+	'_GEOSFree_r',\
+	'_GEOSGeomFromWKT_r',\
+	'_GEOSGeomToWKT_r',\
+	'_GEOSGeomFromWKB_buf_r',\
+	'_GEOSGeomToWKB_buf_r'\
 ]"
 
 GEOS_EMCC_FLAGS += -s EXPORTED_RUNTIME_METHODS="[\
