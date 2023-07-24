@@ -11,11 +11,29 @@ export function initCFunctions() {
 
   /* ========== Initialization and Cleanup ========== */
   GEOSFunctions.init = function() {
+    if (GEOSFunctions.handle) {
+      console.log('GEOS already initialized');
+      return;
+    }
     GEOSFunctions.handle = Module.ccall('GEOS_init_r', null, [null], []);
     GEOSFunctions.last_error = Module._malloc(1025);
     Module.setValue(GEOSFunctions.last_error, 0, 'i8');
     GEOSFunctions.last_notice = Module._malloc(1025);
     Module.setValue(GEOSFunctions.last_notice, 0, 'i8');
+    GEOSFunctions.setNoticeMessageHandler(function(msg, userData) {
+      const msgStr = Module.UTF8ToString(msg);
+      console.debug('geos notice:', msgStr);
+      // Module.HEAPU8.set(msg, userData); // Doesn't work
+      const size = Module.lengthBytesUTF8(msgStr) + 1;
+      Module.stringToUTF8(msgStr, userData, size)
+    });
+    GEOSFunctions.setErrorMessageHandler(function(msg, userData) {
+      const msgStr = Module.UTF8ToString(msg);
+      console.error('geos error:', msgStr);
+      // Module.HEAPU8.set(msg, userData); // Doesn't work
+      const size = Module.lengthBytesUTF8(msgStr) + 1;
+      Module.stringToUTF8(msgStr, userData, size)
+    });
   }
   GEOSFunctions.finish = function(handle) {
     Module.ccall('GEOS_finish_r', null, ['number'], [handle]);
@@ -42,20 +60,103 @@ export function initCFunctions() {
   GEOSFunctions.CoordSeq_create = function(size, dims) {
     return Module.ccall('GEOSCoordSeq_create_r', 'number', ['number', 'number', 'number'], [GEOSFunctions.handle, size, dims]);
   }
-  GEOSFunctions.CoordSeq_copyFromBuffer = function(coordSeqPtr, bufferPtr, size/*, dims = 2*/) {
+  GEOSFunctions.CoordSeq_copyFromBuffer = function(coordSeqPtr, bufferPtr, size, dims = 2) {
     // TODO:
     return Module.ccall('GEOSCoordSeq_copyFromBuffer_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, bufferPtr, size, 2]);
   }
-  GEOSFunctions.CoordSeq_copyToBuffer = function(coordSeqPtr, bufferPtr, size/*, dims = 2*/) {
+  GEOSFunctions.CoordSeq_copyFromArrays = function(coordSeqPtr, x, y, size) {
+    return Module.ccall('GEOSCoordSeq_copyFromArrays_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, x, y, size]);
+  }
+  GEOSFunctions.CoordSeq_copyToBuffer = function(coordSeqPtr, bufferPtr, size, dims = 2) {
     // TODO:
     return Module.ccall('GEOSCoordSeq_copyToBuffer_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, bufferPtr, size, 2]);
+  }
+  GEOSFunctions.CoordSeq_copyToArrays = function(coordSeqPtr, x, y, size) {
+    return Module.ccall('GEOSCoordSeq_copyToArray_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, x, y, size]);
+  }
+  GEOSFunctions.CoordSeq_clone = function(coordSeqPtr) {
+    return Module.ccall('GEOSCoordSeq_clone_r', 'number', ['number', 'number'], [GEOSFunctions.handle, coordSeqPtr]);
   }
   GEOSFunctions.CoordSeq_destroy = function(coordSeqPtr) {
     Module.ccall('GEOSCoordSeq_destroy_r', null, ['number', 'number'], [GEOSFunctions.handle, coordSeqPtr]);
   }
+  GEOSFunctions.CoordSeq_setX = function(coordSeqPtr, index, value) {
+    return Module.ccall('GEOSCoordSeq_setX_r', 'number', ['number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index, value]);
+  }
+  GEOSFunctions.CoordSeq_setY = function(coordSeqPtr, index, value) {
+    return Module.ccall('GEOSCoordSeq_setY_r', 'number', ['number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index, value]);
+  }
+  GEOSFunctions.CoordSeq_setZ = function(coordSeqPtr, index, value) {
+    return Module.ccall('GEOSCoordSeq_setZ_r', 'number', ['number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index, value]);
+  }
+  GEOSFunctions.CoordSeq_setXY = function(coordSeqPtr, index, x, y) {
+    return Module.ccall('GEOSCoordSeq_setXY_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index, x, y]);
+  }
+  GEOSFunctions.CoordSeq_setXYZ = function(coordSeqPtr, index, x, y, z) {
+    return Module.ccall('GEOSCoordSeq_setXYZ_r', 'number', ['number', 'number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index, x, y, z]);
+  }
+  GEOSFunctions.CoordSeq_setOrdinate = function(coordSeqPtr, index, dim, value) {
+    return Module.ccall('GEOSCoordSeq_setOrdinate_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index, dim, value]);
+  }
+  GEOSFunctions.CoordSeq_getX = function(coordSeqPtr, index) {
+    const doublePtr = Module._malloc(8);
+    Module.setValue(doublePtr, 0.0, 'double');
+    const result = Module.ccall('GEOSCoordSeq_getX_r', 'number', ['number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index, doublePtr]);
+    const value = Module.getValue(doublePtr, 'double');
+    Module._free(doublePtr);
+    return (result === 0) ? NaN : value;
+  }
+  GEOSFunctions.CoordSeq_getY = function(coordSeqPtr, index) {
+    const doublePtr = Module._malloc(8);
+    Module.setValue(doublePtr, 0.0, 'double');
+    const result = Module.ccall('GEOSCoordSeq_getY_r', 'number', ['number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index, doublePtr]);
+    const value = Module.getValue(doublePtr, 'double');
+    Module._free(doublePtr);
+    return (result === 0) ? NaN : value;
+  }
+  GEOSFunctions.CoordSeq_getZ = function(coordSeqPtr, index) {
+    const doublePtr = Module._malloc(8);
+    Module.setValue(doublePtr, 0.0, 'double');
+    const result = Module.ccall('GEOSCoordSeq_getZ_r', 'number', ['number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index, doublePtr]);
+    const value = Module.getValue(doublePtr, 'double');
+    Module._free(doublePtr);
+    return (result === 0) ? NaN : value;
+  }
+  GEOSFunctions.CoordSeq_getXY = function(coordSeqPtr, index) {
+    return Module.ccall('GEOSCoordSeq_getXY_r', 'number', ['number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index]);
+  }
+  GEOSFunctions.CoordSeq_getXYZ = function(coordSeqPtr, index) {
+    return Module.ccall('GEOSCoordSeq_getXYZ_r', 'number', ['number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index]);
+  }
+  GEOSFunctions.CoordSeq_getOrdinate = function(coordSeqPtr, index, dim) {
+    return Module.ccall('GEOSCoordSeq_getOrdinate_r', 'number', ['number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, index, dim]);
+  }
   GEOSFunctions.CoordSeq_getSize = function(coordSeqPtr) {
-    // TODO:
-    return Module.ccall('GEOSCoordSeq_getSize_r', 'number', ['number', 'number'], [GEOSFunctions.handle, coordSeqPtr]);
+    const intPtr = Module._malloc(4);
+    Module.setValue(intPtr, 0, 'i32');
+    const result = Module.ccall('GEOSCoordSeq_getSize_r', 'number', ['number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, intPtr]);
+    const size = Module.getValue(intPtr, 'i32');
+    Module._free(intPtr);
+    // Replace exception with -1
+    return (result === 0) ? -1 : size;
+  }
+  GEOSFunctions.CoordSeq_getDimensions = function(coordSeqPtr) {
+    const intPtr = Module._malloc(4);
+    Module.setValue(intPtr, 0, 'i32');
+    const result = Module.ccall('GEOSCoordSeq_getDimensions_r', 'number', ['number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, intPtr]);
+    const dims = Module.getValue(intPtr, 'i32');
+    Module._free(intPtr);
+    // Replace exception with -1
+    return (result === 0) ? -1 : dims;
+  }
+  GEOSFunctions.CoordSeq_isCCW = function(coordSeqPtr) {
+    const charPtr = Module._malloc(1);
+    Module.setValue(charPtr, 0, 'i8');
+    const result = Module.ccall('GEOSCoordSeq_isCCW_r', 'number', ['number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, charPtr]);
+    const isCCW = Module.getValue(charPtr, 'i8');
+    Module._free(charPtr);
+    // Replace exception with -1
+    return (result === 0) ? -1 : (isCCW === 1);
   }
 
   /* ========== Buffer related functions ========== */
@@ -109,6 +210,9 @@ export function initCFunctions() {
   GEOSFunctions.Geom_createCollection = function(type, geomsPtr, ngeoms) {
     return Module.ccall('GEOSGeom_createCollection_r', 'number', ['number', 'number', 'number', 'number'], [GEOSFunctions.handle, type, geomsPtr, ngeoms]);
   }
+  GEOSFunctions.GEOSGeom_releaseCollection = function(collectionPtr, ngeoms) {
+    return Module.ccall('GEOSGeom_releaseCollection_r', 'number', ['number', 'number', 'number'], [GEOSFunctions.handle, collectionPtr, ngeoms]);
+  }
   GEOSFunctions.Geom_createEmptyCollection = function(type) {
     return Module.ccall('GEOSGeom_createEmptyCollection_r', 'number', ['number', 'number'], [GEOSFunctions.handle, type]);
   }
@@ -132,6 +236,11 @@ export function initCFunctions() {
   /* ========= Unary predicate ========= */
   GEOSFunctions.isEmpty = function(geomPtr) {
     return Module.ccall('GEOSisEmpty_r', 'number', ['number', 'number'], [GEOSFunctions.handle, geomPtr]);
+  }
+
+  /* ========= Validity checking ========= */
+  GEOSFunctions.isValid = function(geomPtr) {
+    return Module.ccall('GEOSisValid_r', 'number', ['number', 'number'], [GEOSFunctions.handle, geomPtr]);
   }
 
   /* ========== Geometry info ========== */
@@ -209,7 +318,7 @@ export function initCFunctions() {
     Module.ccall('GEOSFree_r', null, ['number', 'number'], [GEOSFunctions.handle, wktPtr]);
     return wkt;
   }
-  GEOSFunctions.GEOSGeomFromWKT = function(wkt) {
+  GEOSFunctions.GeomFromWKT = function(wkt) {
     const size = Module.lengthBytesUTF8(wkt) + 1;
     const wktPtr = Module._malloc(size);
     Module.stringToUTF8(wkt, wktPtr, size)

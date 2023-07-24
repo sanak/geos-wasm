@@ -14,7 +14,8 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "test": "rollup -c && node test/test.mjs",
-    "performance": "node test/performance.mjs"
+    "performance": "node test/performance.mjs",
+    "test-capi": "node --test test/capi/*.mjs"
   },
   "keywords": [
     "GEOS",
@@ -23,6 +24,9 @@
   ],
   "author": "Christoph Pahmeyer",
   "license": "LGPL-3.0-or-later",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@syncpoint/wkx": "^0.5.2",
     "@turf/center": "^6.5.0",

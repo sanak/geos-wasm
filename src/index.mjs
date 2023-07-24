@@ -23,20 +23,6 @@ export default function initGeosJs(
       try {
         initCFunctions();
         GEOSFunctions.init();
-        GEOSFunctions.setNoticeMessageHandler(function(msg, userData) {
-          const msgStr = Module.UTF8ToString(msg);
-          console.debug('geos notice:', msgStr);
-          // Module.HEAPU8.set(msg, userData); // Doesn't work
-          const size = Module.lengthBytesUTF8(msgStr) + 1;
-          Module.stringToUTF8(msgStr, userData, size)
-        });
-        GEOSFunctions.setErrorMessageHandler(function(msg, userData) {
-          const msgStr = Module.UTF8ToString(msg);
-          console.error('geos error:', msgStr);
-          // Module.HEAPU8.set(msg, userData); // Doesn't work
-          const size = Module.lengthBytesUTF8(msgStr) + 1;
-          Module.stringToUTF8(msgStr, userData, size)
-        });
       } catch (error) {
         console.log('error initializing geos.js', error);
       }
@@ -51,7 +37,7 @@ export default function initGeosJs(
     Module.locateFile = config.locateFile;
 
     CModule(GEOSFunctions.Module).then((res) => {
-      resolve(allJsFunctions);
+      resolve({ ...allJsFunctions, capi: GEOSFunctions });
     });
   });
   return geosJsPromise;

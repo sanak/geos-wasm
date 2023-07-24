@@ -30,9 +30,26 @@ GEOS_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
 	'_GEOSContext_setErrorMessageHandler_r',\
 	'_GEOSCoordSeq_create_r',\
 	'_GEOSCoordSeq_copyFromBuffer_r',\
+	'_GEOSCoordSeq_copyFromArrays_r',\
 	'_GEOSCoordSeq_copyToBuffer_r',\
+	'_GEOSCoordSeq_copyToArrays_r',\
+	'_GEOSCoordSeq_clone_r',\
 	'_GEOSCoordSeq_destroy_r',\
+	'_GEOSCoordSeq_setX_r',\
+	'_GEOSCoordSeq_setY_r',\
+	'_GEOSCoordSeq_setZ_r',\
+	'_GEOSCoordSeq_setXY_r',\
+	'_GEOSCoordSeq_setXYZ_r',\
+	'_GEOSCoordSeq_setOrdinate_r',\
+	'_GEOSCoordSeq_getX_r',\
+	'_GEOSCoordSeq_getY_r',\
+	'_GEOSCoordSeq_getZ_r',\
+	'_GEOSCoordSeq_getXY_r',\
+	'_GEOSCoordSeq_getXYZ_r',\
+	'_GEOSCoordSeq_getOrdinate_r',\
 	'_GEOSCoordSeq_getSize_r',\
+	'_GEOSCoordSeq_getDimensions_r',\
+	'_GEOSCoordSeq_isCCW_r',\
 	'_GEOSBuffer_r',\
 	'_GEOSBufferParams_create_r',\
 	'_GEOSBufferParams_destroy_r',\
@@ -49,12 +66,14 @@ GEOS_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
 	'_GEOSGeom_createEmptyPolygon_r',\
 	'_GEOSGeom_createPolygon_r',\
 	'_GEOSGeom_createCollection_r',\
+	'_GEOSGeom_releaseCollection_r',\
 	'_GEOSGeom_createEmptyCollection_r',\
 	'_GEOSGeom_clone_r',\
 	'_GEOSGeom_destroy_r',\
 	'_GEOSEquals_r',\
 	'_GEOSEqualsExact_r',\
 	'_GEOSisEmpty_r',\
+	'_GEOSisValid_r',\
 	'_GEOSGeomTypeId_r',\
 	'_GEOSGetNumGeometries_r',\
 	'_GEOSGetGeometryN_r',\
