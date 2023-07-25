@@ -15,7 +15,7 @@ const provokeNotice = function(geos) {
   geos.capi.Geom_destroy(g);
 }
 
-test('Test "new" style error and notice handlers', (t) => {
+test('1: Test "new" style error and notice handlers', (t) => {
 
   geos.capi.init();
 
