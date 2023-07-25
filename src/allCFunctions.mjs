@@ -60,21 +60,35 @@ export function initCFunctions() {
   GEOSFunctions.CoordSeq_create = function(size, dims) {
     return Module.ccall('GEOSCoordSeq_create_r', 'number', ['number', 'number', 'number'], [GEOSFunctions.handle, size, dims]);
   }
-  GEOSFunctions.CoordSeq_copyFromBuffer = function(coordSeqPtr, bufferPtr, size, dims = 2) {
-    // TODO:
-    return Module.ccall('GEOSCoordSeq_copyFromBuffer_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, bufferPtr, size, 2]);
+  GEOSFunctions.CoordSeq_copyFromBuffer = function(buffer, size, hasZ = false, hasM = false) {
+    const dims = 2 + (hasZ ? 1 : 0) + (hasM ? 1 : 0);
+    const bufferPtr = Module._malloc(size * dims * 8);
+    Module.HEAPF64.set(buffer, bufferPtr / 8);
+    const coordSeqPtr = Module.ccall('GEOSCoordSeq_copyFromBuffer_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, bufferPtr, size, hasZ, hasM]);
+    Module._free(bufferPtr);
+    return coordSeqPtr;
   }
   GEOSFunctions.CoordSeq_copyFromArrays = function(coordSeqPtr, x, y, size) {
+    // TODO:
     return Module.ccall('GEOSCoordSeq_copyFromArrays_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, x, y, size]);
   }
-  GEOSFunctions.CoordSeq_copyToBuffer = function(coordSeqPtr, bufferPtr, size, dims = 2) {
-    // TODO:
-    return Module.ccall('GEOSCoordSeq_copyToBuffer_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, bufferPtr, size, 2]);
+  GEOSFunctions.CoordSeq_copyToBuffer = function(coordSeqPtr, buffer, hasZ = false, hasM = false) {
+    const dims = 2 + (hasZ ? 1 : 0) + (hasM ? 1 : 0);
+    const bufferPtr = Module._malloc(buffer.length * 8);
+    const result = Module.ccall('GEOSCoordSeq_copyToBuffer_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, bufferPtr, hasZ, hasM]);
+    const view = new Float64Array(Module.HEAPF64.buffer, bufferPtr, buffer.length);
+    for (let i = 0; i < buffer.length; i++) {
+      buffer[i] = view[i];
+    }
+    Module._free(bufferPtr);
+    return result;
   }
   GEOSFunctions.CoordSeq_copyToArrays = function(coordSeqPtr, x, y, size) {
+    // TODO:
     return Module.ccall('GEOSCoordSeq_copyToArray_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, coordSeqPtr, x, y, size]);
   }
   GEOSFunctions.CoordSeq_clone = function(coordSeqPtr) {
+    // TODO;
     return Module.ccall('GEOSCoordSeq_clone_r', 'number', ['number', 'number'], [GEOSFunctions.handle, coordSeqPtr]);
   }
   GEOSFunctions.CoordSeq_destroy = function(coordSeqPtr) {

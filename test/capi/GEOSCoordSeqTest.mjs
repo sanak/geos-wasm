@@ -291,7 +291,7 @@ test('11: ', (t) => {
 
   assert.strictEqual(xcheck[0], x);
   assert.strictEqual(ycheck[0], y);
-  assert("z is NaN on 2D seq", isNaN(zcheck[0]));
+  assert(isNaN(zcheck[0]), 'z is NaN on 2D seq');
 
   // Calling setXYZ on a 2D seq coerces to 3D
   const z = 12;
@@ -303,3 +303,41 @@ test('11: ', (t) => {
   assert.strictEqual(ycheck[0], y);
   assert.strictEqual(zcheck[0], z);
 });
+
+test('12: test 2D from/to buffer', (t) => {
+
+  const N = 10;
+  const dim = 2;
+  const values = new Float64Array(N * dim);
+  for (let i = 0; i < values.length; i++) {
+      values[i] = i;
+  }
+
+  const cs_ = geos.capi.CoordSeq_copyFromBuffer(values, N, false, false);
+
+  const x = [], y = [];
+  assert(geos.capi.CoordSeq_getXY(cs_, 0, x, y));
+  assert.strictEqual(x[0], 0.0);
+  assert.strictEqual(y[0], 1.0);
+
+  assert(geos.capi.CoordSeq_getXY(cs_, N - 1, x, y));
+  assert.strictEqual(x[0], (N-1)*2);
+  assert.strictEqual(y[0], (N-1)*2 + 1);
+
+  const dim_out = [];
+  assert(geos.capi.CoordSeq_getDimensions(cs_, dim_out));
+  assert.strictEqual(dim_out[0], dim);
+
+  const out3 = new Float64Array(N * 3);
+  assert(geos.capi.CoordSeq_copyToBuffer(cs_, out3, true, false));
+  assert.strictEqual(out3[0], values[0]); // X1
+  assert.strictEqual(out3[1], values[1]); // Y1
+  assert(isNaN(out3[2])); // Z1
+  assert.strictEqual(out3[3], values[2]); // X2
+
+  const out2 = new Float64Array(N * 2);
+  assert(geos.capi.CoordSeq_copyToBuffer(cs_, out2, false, false));
+  assert(JSON.stringify(out2) == JSON.stringify(values));
+});
+
+// TODO: 13-21
