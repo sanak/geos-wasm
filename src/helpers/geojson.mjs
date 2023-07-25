@@ -32,13 +32,13 @@ export function pointersToGeojson(pointers, geojson) {
 function geometryToPointer(geometry) {
   // convert feature to WKT
   const wkt = stringify(geometry);
-  const geomPtr = GEOSFunctions.GEOSGeomFromWKT(wkt);
+  const geomPtr = GEOSFunctions.GeomFromWKT(wkt);
   return geomPtr;
 }
 
 function pointerToFeature(pointer, feature) {
   // read WKT from pointer
-  const wkt = GEOSFunctions.GEOSGeomToWKT(pointer);
+  const wkt = GEOSFunctions.GeomToWKT(pointer);
   // convert WKT to GeoJSON
   const geometry = parse(wkt);
   // update the original GeoJSON with the new geometry
