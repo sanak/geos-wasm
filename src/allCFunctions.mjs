@@ -62,6 +62,9 @@ export function initCFunctions() {
   }
   GEOSFunctions.CoordSeq_copyFromBuffer = function(buffer, size, hasZ = false, hasM = false) {
     const dims = 2 + (hasZ ? 1 : 0) + (hasM ? 1 : 0);
+    if (!(buffer instanceof Float64Array)) {
+      buffer = new Float64Array(buffer);
+    }
     const bufferPtr = Module._malloc(size * dims * 8);
     Module.HEAPF64.set(buffer, bufferPtr / 8);
     const coordSeqPtr = Module.ccall('GEOSCoordSeq_copyFromBuffer_r', 'number', ['number', 'number', 'number', 'number', 'number'], [GEOSFunctions.handle, bufferPtr, size, hasZ, hasM]);
