@@ -1,4 +1,5 @@
-import initGeosJs from '../assets/geos.esm.js'
+// import initGeosJs from '../assets/geos.esm.js'
+import initGeosJs from 'https://cdn.skypack.dev/geos-wasm'
 // let OpenLayers
 
 let map, wktfmt, layerInput, layerOutput
