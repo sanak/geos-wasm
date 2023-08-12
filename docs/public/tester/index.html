@@ -1,0 +1,369 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>GEOS WASM Tester</title>
+    <link rel="stylesheet" href="./theme/default/style.css" type="text/css" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="tester.css" type="text/css">
+    <script src="./OpenLayers.js"></script>
+    <script src="./EditingToolbarExt.js"></script>
+    <script src="./tester.js" type="module"></script>
+  </head>
+  <body onload="init()">
+    <h1 id="title">GEOS WASM Tester</h1>
+
+    <div id="tags"></div>
+
+    <p id="shortdesc">Demonstrate GEOS WASM</p>
+
+    <table id="panels">
+      <tbody>
+        <tr>
+          <td id="testpanel" colspan="2">
+            <table class="tests">
+              <tbody>
+                <tr>
+                  <td class="testlabel">
+                    <label for="selTestXml">TestXml</label>
+                  </td>
+                  <td>
+                    <select name="selTestXml" id="selTestXml">
+                      <option selected="selected">
+                        &nbsp;---&nbsp;Select Below&nbsp;---&nbsp;
+                      </option>
+                      <option>../testxml/general/TestBoundary.xml</option>
+                      <option>../testxml/general/TestCentroid.xml</option>
+                      <option>../testxml/general/TestConvexHull-big.xml</option>
+                      <option>../testxml/general/TestConvexHull.xml</option>
+                      <option>../testxml/general/TestFunctionAA.xml</option>
+                      <option>../testxml/general/TestFunctionAAPrec.xml</option>
+                      <option>../testxml/general/TestFunctionLA.xml</option>
+                      <option>../testxml/general/TestFunctionLAPrec.xml</option>
+                      <option>../testxml/general/TestFunctionLL.xml</option>
+                      <option>../testxml/general/TestFunctionLLPrec.xml</option>
+                      <option>../testxml/general/TestFunctionPA.xml</option>
+                      <option>../testxml/general/TestFunctionPL.xml</option>
+                      <option>../testxml/general/TestFunctionPLPrec.xml</option>
+                      <option>../testxml/general/TestFunctionPP.xml</option>
+                      <option>../testxml/general/TestInteriorPoint.xml</option>
+                      <!-- <option>../testxml/general/TestRectanglePredicate.xml</option> -->
+                      <!-- multiple tests per one case not supported -->
+                      <option>../testxml/general/TestRelateAA.xml</option>
+                      <option>../testxml/general/TestRelateAC.xml</option>
+                      <option>../testxml/general/TestRelateLA.xml</option>
+                      <option>../testxml/general/TestRelateLC.xml</option>
+                      <option>../testxml/general/TestRelateLL.xml</option>
+                      <option>../testxml/general/TestRelatePA.xml</option>
+                      <option>../testxml/general/TestRelatePL.xml</option>
+                      <option>../testxml/general/TestRelatePP.xml</option>
+                      <option>../testxml/general/TestSimple.xml</option>
+                      <option>../testxml/general/TestValid.xml</option>
+                      <option>../testxml/general/TestValid2-big.xml</option>
+                      <option>../testxml/general/TestValid2.xml</option>
+                      <option>../testxml/general/TestWithinDistance.xml</option>
+                      <!-- isWithinDistance function not supported in GEOS CAPI -->
+                      <option>
+                        ../testxml/robust/TestRobustOverlayFixed.xml
+                      </option>
+                      <option>
+                        ../testxml/robust/TestRobustOverlayFloat.xml
+                      </option>
+                      <option>../testxml/robust/TestRobustRelate.xml</option>
+                      <option>../testxml/validate/TestRelateAA-big.xml</option>
+                      <option>../testxml/validate/TestRelateAA.xml</option>
+                      <option>../testxml/validate/TestRelateAC.xml</option>
+                      <option>../testxml/validate/TestRelateLA.xml</option>
+                      <option>../testxml/validate/TestRelateLC.xml</option>
+                      <option>../testxml/validate/TestRelateLL.xml</option>
+                      <option>../testxml/validate/TestRelatePA.xml</option>
+                      <option>../testxml/validate/TestRelatePL.xml</option>
+                      <option>../testxml/validate/TestRelatePP.xml</option>
+                    </select>
+                    <input
+                      type="button"
+                      id="btnLoad"
+                      value="Load"
+                      onclick="loadTestXml();"
+                    /><br />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="testlabel">
+                    <label for="selTestCase">TestCase</label>
+                  </td>
+                  <td>
+                    <select
+                      name="selTestCase"
+                      id="selTestCase"
+                      onchange="loadTestCase();"
+                    >
+                      <option selected="selected">
+                        &nbsp;---&nbsp;Select Below&nbsp;---&nbsp;
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td id="controlpanel">
+            <table class="controls">
+              <tbody>
+                <tr>
+                  <td colspan="2">
+                    <label for="selOperation"
+                      >Operation(<img
+                        src="./img/unary-geom-function.png"
+                      /><font color="blue">:unary</font>/<img
+                        src="./img/binary-geom-function.png"
+                      /><font color="red">:binary</font>)</label
+                    >
+                    <select
+                      size="17"
+                      name="selOperation"
+                      id="selOperation"
+                      onchange="updateOperation(this.value)"
+                    >
+                      <option
+                        value="intersection"
+                        class="binary"
+                        selected="selected"
+                      >
+                        &nbsp;&nbsp;&nbsp;intersection
+                      </option>
+                      <option value="buffer" class="unary">
+                        &nbsp;&nbsp;&nbsp;buffer
+                      </option>
+                      <option value="convexhull" class="unary">
+                        &nbsp;&nbsp;&nbsp;convexHull
+                      </option>
+                      <option value="difference" class="binary">
+                        &nbsp;&nbsp;&nbsp;difference
+                      </option>
+                      <option value="symdifference" class="binary">
+                        &nbsp;&nbsp;&nbsp;symDifference
+                      </option>
+                      <option value="getboundary" class="unary">
+                        &nbsp;&nbsp;&nbsp;boundary
+                      </option>
+                      <option value="union" class="binary">
+                        &nbsp;&nbsp;&nbsp;Union
+                      </option>
+                      <option value="pointonsurface" class="unary">
+                        &nbsp;&nbsp;&nbsp;pointOnSurface
+                      </option>
+                      <option value="getcentroid" class="unary">
+                        &nbsp;&nbsp;&nbsp;getCentroid
+                      </option>
+                      <option value="envelope" class="unary">
+                        &nbsp;&nbsp;&nbsp;getEnvelope
+                      </option>
+                      <option value="relate" class="binary">
+                        &nbsp;&nbsp;&nbsp;relate
+                      </option>
+                      <!-- <option value="polygonize" class="unary">&nbsp;&nbsp;&nbsp;polygonize</option> -->
+                      <!-- SWIG interface not supported -->
+                      <option value="linemerge" class="unary">
+                        &nbsp;&nbsp;&nbsp;lineMerge
+                      </option>
+                      <option value="simplify" class="unary">
+                        &nbsp;&nbsp;&nbsp;simplify
+                      </option>
+                      <option value="topologypreservesimplify" class="unary">
+                        &nbsp;&nbsp;&nbsp;topologyPreserveSimplify
+                      </option>
+                      <option value="relatepattern" class="binary">
+                        &nbsp;&nbsp;&nbsp;relatePattern
+                      </option>
+                      <option value="disjoint" class="binary">
+                        &nbsp;&nbsp;&nbsp;disjoint
+                      </option>
+                      <option value="touches" class="binary">
+                        &nbsp;&nbsp;&nbsp;touches
+                      </option>
+                      <option value="intersects" class="binary">
+                        &nbsp;&nbsp;&nbsp;intersects
+                      </option>
+                      <option value="crosses" class="binary">
+                        &nbsp;&nbsp;&nbsp;crosses
+                      </option>
+                      <option value="within" class="binary">
+                        &nbsp;&nbsp;&nbsp;within
+                      </option>
+                      <option value="contains" class="binary">
+                        &nbsp;&nbsp;&nbsp;contains
+                      </option>
+                      <option value="overlaps" class="binary">
+                        &nbsp;&nbsp;&nbsp;overlaps
+                      </option>
+                      <option value="equals" class="binary">
+                        &nbsp;&nbsp;&nbsp;equals
+                      </option>
+                      <option value="equalsexact" class="binary">
+                        &nbsp;&nbsp;&nbsp;equalsExact
+                      </option>
+                      <option value="isempty" class="unary">
+                        &nbsp;&nbsp;&nbsp;isEmpty
+                      </option>
+                      <option value="isvalid" class="unary">
+                        &nbsp;&nbsp;&nbsp;isValid
+                      </option>
+                      <option value="issimple" class="unary">
+                        &nbsp;&nbsp;&nbsp;isSimple
+                      </option>
+                      <option value="isring" class="unary">
+                        &nbsp;&nbsp;&nbsp;isRing
+                      </option>
+                      <option value="hasz" class="unary">
+                        &nbsp;&nbsp;&nbsp;hasZ
+                      </option>
+                      <option value="area" class="unary">
+                        &nbsp;&nbsp;&nbsp;area
+                      </option>
+                      <option value="length" class="unary">
+                        &nbsp;&nbsp;&nbsp;length
+                      </option>
+                      <option value="distance" class="binary">
+                        &nbsp;&nbsp;&nbsp;distance
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="text-align: center">
+                    <input
+                      type="button"
+                      id="btnCompute"
+                      value="Compute"
+                      onclick="compute();"
+                    />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="arglabel">
+                    <label for="txtArg1" id="lblArg1">Argument1</label>
+                  </td>
+                  <td class="argtext">
+                    <input type="text" id="txtArg1" class="txtArg" />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="arglabel">
+                    <label for="txtArg2" id="lblArg2">Argument2</label>
+                  </td>
+                  <td class="argtext">
+                    <input type="text" id="txtArg2" class="txtArg" />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="arglabel">
+                    <label for="txtArg3" id="lblArg3">Argument3</label>
+                  </td>
+                  <td class="argtext">
+                    <input type="text" id="txtArg3" class="txtArg" />
+                  </td>
+                </tr>
+                <tr>
+                  <td id="option" colspan="2">
+                    <input
+                      type="checkbox"
+                      id="chkDisplay"
+                      name="chkDisplay"
+                      checked="checked"
+                      onclick="displayInputGeometries(this.checked);"
+                    />
+                    <label for="chkDisplay">Display Input Geometries</label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td id="mappanel">
+            <div id="map"></div>
+          </td>
+        </tr>
+        <tr>
+          <td id="iopanel" colspan="2">
+            <table class="controls">
+              <tbody>
+                <tr class="io">
+                  <td class="iolabel">
+                    <input
+                      type="radio"
+                      name="inputtype"
+                      id="radA"
+                      value="a"
+                      checked="checked"
+                      onclick="updateInput();"
+                    />
+                    <label for="radA" id="lblA">A</label><br />
+                    <input
+                      type="radio"
+                      name="inputtype"
+                      id="radB"
+                      value="b"
+                      onclick="updateInput();"
+                    />
+                    <label for="radB" id="lblB">B</label><br />
+                  </td>
+                  <td class="iotext">
+                    <textarea id="txtInput"></textarea>
+                  </td>
+                  <td class="iobutton">
+                    <input
+                      type="button"
+                      id="btnClearInput"
+                      value="Clear"
+                      onclick="clearInput();"
+                    /><br />
+                    <input
+                      type="button"
+                      id="btnLoadInput"
+                      value="Load"
+                      onclick="loadInput();"
+                    />
+                  </td>
+                </tr>
+                <tr class="io">
+                  <td class="iolabel">
+                    <input
+                      type="radio"
+                      name="outputtype"
+                      id="radResult"
+                      value="result"
+                      checked="checked"
+                      onclick="updateOutput();"
+                    />
+                    <label for="radResult" id="lblResult">Result</label><br />
+                    <input
+                      type="radio"
+                      name="outputtype"
+                      id="radExpected"
+                      value="expected"
+                      onclick="updateOutput();"
+                    />
+                    <label for="radExpected" id="lblExpected">Expected</label
+                    ><br />
+                  </td>
+                  <td class="iotext">
+                    <textarea id="txtOutput"></textarea>
+                  </td>
+                  <td class="iobutton">
+                    <input
+                      type="button"
+                      id="btnClearOutput"
+                      value="Clear"
+                      onclick="clearOutput();"
+                    /><br />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
