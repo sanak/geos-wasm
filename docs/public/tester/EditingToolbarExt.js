@@ -42,7 +42,6 @@ OpenLayers.Control.EditingToolbarExt = OpenLayers.Class(
         ];
         for (var i=0, len=controls.length; i<len-1; i++) {
             controls[i].featureAdded = function(feature) {
-                debugger
                 feature.state = OpenLayers.State.INSERT;
                 var strtype = getInputType();
                 setFeatureType(feature, strtype);
