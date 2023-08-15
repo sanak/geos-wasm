@@ -1,11 +1,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>GEOS WASM Tester</title>
-    <link rel="stylesheet" href="./theme/default/style.css" type="text/css" />
+    <link rel="stylesheet" href="./lib/ol2/theme/default/style.css" type="text/css" />
     <link rel="stylesheet" href="style.css" type="text/css" />
     <link rel="stylesheet" href="tester.css" type="text/css">
-    <script src="./OpenLayers.js"></script>
-    <script src="./EditingToolbarExt.js"></script>
+    <script src="./lib/ol2/OpenLayers.js"></script>
+    <script src="./lib/ol2/EditingToolbarExt.js"></script>
     <script src="./tester.js" type="module"></script>
   </head>
   <body onload="init(OpenLayers)">
@@ -114,10 +114,10 @@
                   <td colspan="2">
                     <label for="selOperation"
                       >Operation(<img
-                        src="./img/unary-geom-function.png"
-                      /><font color="blue">:unary</font>/<img
-                        src="./img/binary-geom-function.png"
-                      /><font color="red">:binary</font>)</label
+                        src="./images/unary-geom-function.png"
+                      /><span style="color:blue">:unary</span>/<img
+                        src="./images/binary-geom-function.png"
+                      /><span style="color:red">:binary</span>)</label
                     >
                     <select
                       size="17"

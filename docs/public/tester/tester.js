@@ -33,7 +33,7 @@ async function init (_OpenLayers) {
   })
   const graphic = new OpenLayers.Layer.Image(
     'OpenLayers Image',
-    './img/blank.gif',
+    './lib/ol2/img/blank.gif',
     new OpenLayers.Bounds(-100000, -100000, 100000, 100000), // TODO: initial scale ?
     new OpenLayers.Size(426, 426)
   )
@@ -753,8 +753,8 @@ window.loadTestCase = loadTestCase;
   const offImages = []
   for (let i = 0; i < roots.length; ++i) {
     onImages[i] = new Image()
-    onImages[i].src = './theme/default/img/' + roots[i] + '_on.png'
+    onImages[i].src = './lib/ol2/theme/default/img/' + roots[i] + '_on.png'
     offImages[i] = new Image()
-    offImages[i].src = './theme/default/img/' + roots[i] + '_on.png'
+    offImages[i].src = './lib/ol2/theme/default/img/' + roots[i] + '_on.png'
   }
 })()

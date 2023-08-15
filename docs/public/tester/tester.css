@@ -88,12 +88,12 @@ td.iotext {
   width: 500px;
 }
 option.unary {
-  background-image: url("./img/unary-geom-function.png");
+  background-image: url("./images/unary-geom-function.png");
   background-repeat: no-repeat;
   color: blue;
 }
 option.binary {
-  background-image: url("./img/binary-geom-function.png");
+  background-image: url("./images/binary-geom-function.png");
   background-repeat: no-repeat;
   color: red;
 }
