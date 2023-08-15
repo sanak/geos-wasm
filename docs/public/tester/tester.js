@@ -13,6 +13,67 @@ window.featureB = null
 
 async function init (_OpenLayers) {
   OpenLayers = _OpenLayers
+
+  // Customize EditingToolbar
+  OpenLayers.Control.EditingToolbarExt = OpenLayers.Class(OpenLayers.Control.Panel, {
+    initialize: function (layer, options) {
+      OpenLayers.Control.Panel.prototype.initialize.apply(this, [options])
+
+      const zoomNavis = ([
+        new OpenLayers.Control.ZoomBox(),
+        new OpenLayers.Control.Navigation()
+      ])
+      const drawFeatures = [
+        new OpenLayers.Control.DrawFeature(layer, OpenLayers.Handler.Point, { displayClass: 'olControlDrawFeaturePoint' }),
+        new OpenLayers.Control.DrawFeature(layer, OpenLayers.Handler.Path, { displayClass: 'olControlDrawFeaturePath' }),
+        new OpenLayers.Control.DrawFeature(layer, OpenLayers.Handler.Polygon, { displayClass: 'olControlDrawFeaturePolygon' })
+      ]
+      for (let i = 0; i < drawFeatures.length; i++) {
+        drawFeatures[i].featureAdded = function (feature) {
+          const strtype = getInputType()
+          setFeatureType(feature, strtype)
+          setFeatureStyle(feature, strtype)
+          if (strtype === 'a') {
+            if (window.featureA) {
+              destroyFeatures(layer, window.featureA)
+            }
+            window.featureA = feature
+          } else if (strtype === 'b') {
+            if (window.featureB) {
+              destroyFeatures(layer, window.featureB)
+            }
+            window.featureB = feature
+          }
+          updateInput()
+        }
+      }
+      const modifyFeature = new OpenLayers.Control.ModifyFeature(layer, { displayClass: 'olControlMoveFeature' })
+      modifyFeature.onModificationStart = function (feature) {
+        const strtype = getFeatureType(feature)
+        setInputType(strtype)
+        updateInput()
+        layer.redraw() // for vertex marker
+      }
+      modifyFeature.onModification = function (feature) {
+        updateInput()
+      }
+      modifyFeature.onModificationEnd = function (feature) {
+        updateInput()
+      }
+      this.addControls(zoomNavis.concat(drawFeatures.concat([modifyFeature])))
+    },
+
+    draw: function () {
+      const div = OpenLayers.Control.Panel.prototype.draw.apply(this, arguments)
+      if (this.defaultControl === null) {
+        this.defaultControl = this.controls[1]
+      }
+      return div
+    },
+
+    CLASS_NAME: 'OpenLayers.Control.EditingToolbar'
+  })
+
   const options = {
     units: 'm',
     maxExtent: new OpenLayers.Bounds(
@@ -28,6 +89,7 @@ async function init (_OpenLayers) {
     numZoomLevels: 16
   }
   map = new OpenLayers.Map('map', options)
+  window.map = map // For debug
   wktfmt = new OpenLayers.Format.WKT({
     externalProjection: new OpenLayers.Projection('EPSG:4326')
   })
@@ -38,8 +100,14 @@ async function init (_OpenLayers) {
     new OpenLayers.Size(426, 426)
   )
 
-  layerInput = new OpenLayers.Layer.Vector('Vector Layer')
-  layerOutput = new OpenLayers.Layer.Vector('Vector Layer')
+  layerInput = new OpenLayers.Layer.Vector('Input Vector Layer', {
+    styleMap: new OpenLayers.StyleMap({
+      temporary: OpenLayers.Feature.Vector.style.default,
+      default: OpenLayers.Feature.Vector.style.default,
+      select: OpenLayers.Feature.Vector.style.select
+    })
+  })
+  layerOutput = new OpenLayers.Layer.Vector('Output Vector Layer')
 
   map.addLayers([graphic, layerInput, layerOutput])
   map.addControl(new OpenLayers.Control.EditingToolbarExt(layerInput))
@@ -312,6 +380,21 @@ function setFeatureType (feature, strtype) {
   }
 }
 window.setFeatureType = setFeatureType
+
+function getFeatureType (feature) {
+  if (isEmpty(feature)) {
+    return
+  }
+
+  let strtype = ''
+  if (feature.constructor !== Array) {
+    strtype = feature.attributes.type
+  } else if (feature.length > 0) {
+    strtype = feature[0].attributes.type
+  }
+  return strtype
+}
+window.getFeatureType = getFeatureType
 
 function displayInputGeometries (visibility) {
   layerInput.setVisibility(visibility)

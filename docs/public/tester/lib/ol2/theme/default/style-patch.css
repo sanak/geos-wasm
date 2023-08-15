@@ -1,0 +1,14 @@
+/* Fix OpenLayers 2.13.1 CSS */
+.olControlEditingToolbar .olControlZoomBoxItemInactive {
+  background-position: -128px -1px;
+}
+.olControlEditingToolbar .olControlZoomBoxItemActive  {
+  background-position: -128px -24px;
+}
+
+.olControlEditingToolbar .olControlMoveFeatureItemInactive{
+  background-position: -1px -1px;
+}
+.olControlEditingToolbar .olControlMoveFeatureItemActive {
+  background-position: -1px -24px;
+}
