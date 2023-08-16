@@ -6,9 +6,16 @@
     <link rel="stylesheet" href="style.css" type="text/css" />
     <link rel="stylesheet" href="tester.css" type="text/css">
     <script src="./lib/ol2/OpenLayers.js"></script>
-    <script src="./tester.js" type="module"></script>
+    <script type="module">
+      import Tester from "./tester.js"
+      window.onload = () => {
+        const tester = new Tester(OpenLayers)
+        window.tester = tester
+        tester.init()
+      }
+    </script>
   </head>
-  <body onload="init(OpenLayers)">
+  <body>
     <h1 id="title">GEOS WASM Tester</h1>
 
     <div id="tags"></div>
@@ -82,7 +89,7 @@
                       type="button"
                       id="btnLoad"
                       value="Load"
-                      onclick="loadTestXml();"
+                      onclick="tester.loadTestXml()"
                     /><br />
                   </td>
                 </tr>
@@ -94,7 +101,7 @@
                     <select
                       name="selTestCase"
                       id="selTestCase"
-                      onchange="loadTestCase();"
+                      onchange="tester.loadTestCase()"
                     >
                       <option selected="selected">
                         &nbsp;---&nbsp;Select Below&nbsp;---&nbsp;
@@ -123,7 +130,7 @@
                       size="17"
                       name="selOperation"
                       id="selOperation"
-                      onchange="updateOperation(this.value)"
+                      onchange="tester.updateOperation(this.value)"
                     >
                       <option
                         value="intersection"
@@ -236,7 +243,7 @@
                       type="button"
                       id="btnCompute"
                       value="Compute"
-                      onclick="compute();"
+                      onclick="tester.compute()"
                     />
                   </td>
                 </tr>
@@ -272,7 +279,7 @@
                       id="chkDisplay"
                       name="chkDisplay"
                       checked="checked"
-                      onclick="displayInputGeometries(this.checked);"
+                      onclick="tester.displayInputGeometries(this.checked)"
                     />
                     <label for="chkDisplay">Display Input Geometries</label>
                   </td>
@@ -296,7 +303,7 @@
                       id="radA"
                       value="a"
                       checked="checked"
-                      onclick="updateInput();"
+                      onclick="tester.updateInput()"
                     />
                     <label for="radA" id="lblA">A</label><br />
                     <input
@@ -304,7 +311,7 @@
                       name="inputtype"
                       id="radB"
                       value="b"
-                      onclick="updateInput();"
+                      onclick="tester.updateInput()"
                     />
                     <label for="radB" id="lblB">B</label><br />
                   </td>
@@ -316,13 +323,13 @@
                       type="button"
                       id="btnClearInput"
                       value="Clear"
-                      onclick="clearInput();"
+                      onclick="tester.clearInput()"
                     /><br />
                     <input
                       type="button"
                       id="btnLoadInput"
                       value="Load"
-                      onclick="loadInput();"
+                      onclick="tester.loadInput()"
                     />
                   </td>
                 </tr>
@@ -334,7 +341,7 @@
                       id="radResult"
                       value="result"
                       checked="checked"
-                      onclick="updateOutput();"
+                      onclick="tester.updateOutput()"
                     />
                     <label for="radResult" id="lblResult">Result</label><br />
                     <input
@@ -342,7 +349,7 @@
                       name="outputtype"
                       id="radExpected"
                       value="expected"
-                      onclick="updateOutput();"
+                      onclick="tester.updateOutput()"
                     />
                     <label for="radExpected" id="lblExpected">Expected</label
                     ><br />
@@ -355,7 +362,7 @@
                       type="button"
                       id="btnClearOutput"
                       value="Clear"
-                      onclick="clearOutput();"
+                      onclick="tester.clearOutput()"
                     /><br />
                   </td>
                 </tr>
