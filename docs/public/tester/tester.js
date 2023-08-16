@@ -821,23 +821,4 @@ function loadTestCase () {
     compute(exp)
   }
 }
-window.loadTestCase = loadTestCase;
-
-// preload images
-(function () {
-  const roots = [
-    'draw_point',
-    'draw_line',
-    'draw_polygon',
-    'pan',
-    'move_feature'
-  ]
-  const onImages = []
-  const offImages = []
-  for (let i = 0; i < roots.length; ++i) {
-    onImages[i] = new Image()
-    onImages[i].src = './lib/ol2/theme/default/img/' + roots[i] + '_on.png'
-    offImages[i] = new Image()
-    offImages[i].src = './lib/ol2/theme/default/img/' + roots[i] + '_on.png'
-  }
-})()
+window.loadTestCase = loadTestCase
