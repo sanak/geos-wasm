@@ -34,14 +34,8 @@
                     <label for="selTestXml">TestXml</label>
                   </td>
                   <td>
-                    <select name="selTestXml" id="selTestXml">
-                    </select>
-                    <input
-                      type="button"
-                      id="btnLoad"
-                      value="Load"
-                      onclick="tester.loadTestXml()"
-                    /><br />
+                    <select name="selTestXml" id="selTestXml"></select>
+                    <input type="button" id="btnLoad" value="Load" onclick="tester.loadTestXml()"/><br />
                   </td>
                 </tr>
                 <tr>
@@ -49,14 +43,8 @@
                     <label for="selTestCase">TestCase</label>
                   </td>
                   <td>
-                    <select
-                      name="selTestCase"
-                      id="selTestCase"
-                      onchange="tester.loadTestCase()"
-                    >
-                      <option selected="selected">
-                        &nbsp;---&nbsp;Select Below&nbsp;---&nbsp;
-                      </option>
+                    <select name="selTestCase" id="selTestCase" onchange="tester.loadTestCase()">
+                      <option selected="selected">&nbsp;---&nbsp;Select Below&nbsp;---&nbsp;</option>
                     </select>
                   </td>
                 </tr>
@@ -70,135 +58,55 @@
               <tbody>
                 <tr>
                   <td colspan="2">
-                    <label for="selOperation"
-                      >Operation(<img
-                        src="./images/unary-geom-function.png"
-                      /><span style="color:blue">:unary</span>/<img
-                        src="./images/binary-geom-function.png"
-                      /><span style="color:red">:binary</span>)</label
-                    >
-                    <select
-                      size="17"
-                      name="selOperation"
-                      id="selOperation"
-                      onchange="tester.updateOperation(this.value)"
-                    >
-                      <option
-                        value="intersection"
-                        class="binary"
-                        selected="selected"
-                      >
-                        &nbsp;&nbsp;&nbsp;intersection
-                      </option>
-                      <option value="buffer" class="unary">
-                        &nbsp;&nbsp;&nbsp;buffer
-                      </option>
-                      <option value="convexhull" class="unary">
-                        &nbsp;&nbsp;&nbsp;convexHull
-                      </option>
-                      <option value="difference" class="binary">
-                        &nbsp;&nbsp;&nbsp;difference
-                      </option>
-                      <option value="symdifference" class="binary">
-                        &nbsp;&nbsp;&nbsp;symDifference
-                      </option>
-                      <option value="getboundary" class="unary">
-                        &nbsp;&nbsp;&nbsp;boundary
-                      </option>
-                      <option value="union" class="binary">
-                        &nbsp;&nbsp;&nbsp;Union
-                      </option>
-                      <option value="pointonsurface" class="unary">
-                        &nbsp;&nbsp;&nbsp;pointOnSurface
-                      </option>
-                      <option value="getcentroid" class="unary">
-                        &nbsp;&nbsp;&nbsp;getCentroid
-                      </option>
-                      <option value="envelope" class="unary">
-                        &nbsp;&nbsp;&nbsp;getEnvelope
-                      </option>
-                      <option value="relate" class="binary">
-                        &nbsp;&nbsp;&nbsp;relate
-                      </option>
-                      <!-- <option value="polygonize" class="unary">&nbsp;&nbsp;&nbsp;polygonize</option> -->
-                      <!-- SWIG interface not supported -->
-                      <option value="linemerge" class="unary">
-                        &nbsp;&nbsp;&nbsp;lineMerge
-                      </option>
-                      <option value="simplify" class="unary">
-                        &nbsp;&nbsp;&nbsp;simplify
-                      </option>
-                      <option value="topologypreservesimplify" class="unary">
-                        &nbsp;&nbsp;&nbsp;topologyPreserveSimplify
-                      </option>
-                      <option value="relatepattern" class="binary">
-                        &nbsp;&nbsp;&nbsp;relatePattern
-                      </option>
-                      <option value="disjoint" class="binary">
-                        &nbsp;&nbsp;&nbsp;disjoint
-                      </option>
-                      <option value="touches" class="binary">
-                        &nbsp;&nbsp;&nbsp;touches
-                      </option>
-                      <option value="intersects" class="binary">
-                        &nbsp;&nbsp;&nbsp;intersects
-                      </option>
-                      <option value="crosses" class="binary">
-                        &nbsp;&nbsp;&nbsp;crosses
-                      </option>
-                      <option value="within" class="binary">
-                        &nbsp;&nbsp;&nbsp;within
-                      </option>
-                      <option value="contains" class="binary">
-                        &nbsp;&nbsp;&nbsp;contains
-                      </option>
-                      <option value="overlaps" class="binary">
-                        &nbsp;&nbsp;&nbsp;overlaps
-                      </option>
-                      <option value="equals" class="binary">
-                        &nbsp;&nbsp;&nbsp;equals
-                      </option>
-                      <option value="equalsexact" class="binary">
-                        &nbsp;&nbsp;&nbsp;equalsExact
-                      </option>
-                      <option value="isempty" class="unary">
-                        &nbsp;&nbsp;&nbsp;isEmpty
-                      </option>
-                      <option value="isvalid" class="unary">
-                        &nbsp;&nbsp;&nbsp;isValid
-                      </option>
-                      <option value="issimple" class="unary">
-                        &nbsp;&nbsp;&nbsp;isSimple
-                      </option>
-                      <option value="isring" class="unary">
-                        &nbsp;&nbsp;&nbsp;isRing
-                      </option>
-                      <option value="hasz" class="unary">
-                        &nbsp;&nbsp;&nbsp;hasZ
-                      </option>
-                      <option value="area" class="unary">
-                        &nbsp;&nbsp;&nbsp;area
-                      </option>
-                      <option value="length" class="unary">
-                        &nbsp;&nbsp;&nbsp;length
-                      </option>
-                      <option value="distance" class="binary">
-                        &nbsp;&nbsp;&nbsp;distance
-                      </option>
+                    <label for="selOperation">
+                      Operation(
+                        <img src="./images/unary-geom-function.png"/><span style="color:blue">:unary</span>
+                        /
+                        <img src="./images/binary-geom-function.png"/><span style="color:red">:binary</span>
+                      )
+                    </label>
+                    <select size="17" name="selOperation" id="selOperation" onchange="tester.updateOperation(this.value)">
+                      <option value="intersection" class="binary" selected="selected">&nbsp;&nbsp;&nbsp;intersection</option>
+                      <option value="buffer" class="unary">&nbsp;&nbsp;&nbsp;buffer</option>
+                      <option value="convexhull" class="unary">&nbsp;&nbsp;&nbsp;convexHull</option>
+                      <option value="difference" class="binary">&nbsp;&nbsp;&nbsp;difference</option>
+                      <option value="symdifference" class="binary">&nbsp;&nbsp;&nbsp;symDifference</option>
+                      <option value="getboundary" class="unary">&nbsp;&nbsp;&nbsp;boundary</option>
+                      <option value="union" class="binary">&nbsp;&nbsp;&nbsp;Union</option>
+                      <option value="pointonsurface" class="unary">&nbsp;&nbsp;&nbsp;pointOnSurface</option>
+                      <option value="getcentroid" class="unary">&nbsp;&nbsp;&nbsp;getCentroid</option>
+                      <option value="envelope" class="unary">&nbsp;&nbsp;&nbsp;getEnvelope</option>
+                      <option value="relate" class="binary">&nbsp;&nbsp;&nbsp;relate</option>
+                      <!-- <option value="polygonize" class="unary">&nbsp;&nbsp;&nbsp;polygonize</option> --> <!-- SWIG interface not supported -->
+                      <option value="linemerge" class="unary">&nbsp;&nbsp;&nbsp;lineMerge</option>
+                      <option value="simplify" class="unary">&nbsp;&nbsp;&nbsp;simplify</option>
+                      <option value="topologypreservesimplify" class="unary">&nbsp;&nbsp;&nbsp;topologyPreserveSimplify</option>
+                      <option value="relatepattern" class="binary">&nbsp;&nbsp;&nbsp;relatePattern</option>
+                      <option value="disjoint" class="binary">&nbsp;&nbsp;&nbsp;disjoint</option>
+                      <option value="touches" class="binary">&nbsp;&nbsp;&nbsp;touches</option>
+                      <option value="intersects" class="binary">&nbsp;&nbsp;&nbsp;intersects</option>
+                      <option value="crosses" class="binary">&nbsp;&nbsp;&nbsp;crosses</option>
+                      <option value="within" class="binary">&nbsp;&nbsp;&nbsp;within</option>
+                      <option value="contains" class="binary">&nbsp;&nbsp;&nbsp;contains</option>
+                      <option value="overlaps" class="binary">&nbsp;&nbsp;&nbsp;overlaps</option>
+                      <option value="equals" class="binary">&nbsp;&nbsp;&nbsp;equals</option>
+                      <option value="equalsexact" class="binary">&nbsp;&nbsp;&nbsp;equalsExact</option>
+                      <option value="isempty" class="unary">&nbsp;&nbsp;&nbsp;isEmpty</option>
+                      <option value="isvalid" class="unary">&nbsp;&nbsp;&nbsp;isValid</option>
+                      <option value="issimple" class="unary">&nbsp;&nbsp;&nbsp;isSimple</option>
+                      <option value="isring" class="unary">&nbsp;&nbsp;&nbsp;isRing</option>
+                      <option value="hasz" class="unary">&nbsp;&nbsp;&nbsp;hasZ</option>
+                      <option value="area" class="unary">&nbsp;&nbsp;&nbsp;area</option>
+                      <option value="length" class="unary">&nbsp;&nbsp;&nbsp;length</option>
+                      <option value="distance" class="binary">&nbsp;&nbsp;&nbsp;distance</option>
                     </select>
                   </td>
                 </tr>
                 <tr>
                   <td colspan="2" style="text-align: center">
-                    <input
-                      type="button"
-                      id="btnCompute"
-                      value="Compute"
-                      onclick="tester.compute()"
-                    />
+                    <input type="button" id="btnCompute" value="Compute" onclick="tester.compute()" />
                   </td>
                 </tr>
-
                 <tr>
                   <td class="arglabel">
                     <label for="txtArg1" id="lblArg1">Argument1</label>
@@ -225,11 +133,7 @@
                 </tr>
                 <tr>
                   <td id="option" colspan="2">
-                    <input
-                      type="checkbox"
-                      id="chkDisplay"
-                      name="chkDisplay"
-                      checked="checked"
+                    <input type="checkbox" id="chkDisplay" name="chkDisplay" checked="checked"
                       onclick="tester.displayInputGeometries(this.checked)"
                     />
                     <label for="chkDisplay">Display Input Geometries</label>
@@ -248,20 +152,11 @@
               <tbody>
                 <tr class="io">
                   <td class="iolabel">
-                    <input
-                      type="radio"
-                      name="inputtype"
-                      id="radA"
-                      value="a"
-                      checked="checked"
+                    <input type="radio" name="inputtype" id="radA" value="a" checked="checked"
                       onclick="tester.updateInput()"
                     />
                     <label for="radA" id="lblA">A</label><br />
-                    <input
-                      type="radio"
-                      name="inputtype"
-                      id="radB"
-                      value="b"
+                    <input type="radio" name="inputtype" id="radB" value="b"
                       onclick="tester.updateInput()"
                     />
                     <label for="radB" id="lblB">B</label><br />
@@ -270,49 +165,30 @@
                     <textarea id="txtInput"></textarea>
                   </td>
                   <td class="iobutton">
-                    <input
-                      type="button"
-                      id="btnClearInput"
-                      value="Clear"
+                    <input type="button" id="btnClearInput" value="Clear"
                       onclick="tester.clearInput()"
                     /><br />
-                    <input
-                      type="button"
-                      id="btnLoadInput"
-                      value="Load"
+                    <input type="button" id="btnLoadInput" value="Load"
                       onclick="tester.loadInput()"
                     />
                   </td>
                 </tr>
                 <tr class="io">
                   <td class="iolabel">
-                    <input
-                      type="radio"
-                      name="outputtype"
-                      id="radResult"
-                      value="result"
-                      checked="checked"
+                    <input type="radio" name="outputtype" id="radResult" value="result" checked="checked"
                       onclick="tester.updateOutput()"
                     />
                     <label for="radResult" id="lblResult">Result</label><br />
-                    <input
-                      type="radio"
-                      name="outputtype"
-                      id="radExpected"
-                      value="expected"
+                    <input type="radio" name="outputtype" id="radExpected" value="expected"
                       onclick="tester.updateOutput()"
                     />
-                    <label for="radExpected" id="lblExpected">Expected</label
-                    ><br />
+                    <label for="radExpected" id="lblExpected">Expected</label><br />
                   </td>
                   <td class="iotext">
                     <textarea id="txtOutput"></textarea>
                   </td>
                   <td class="iobutton">
-                    <input
-                      type="button"
-                      id="btnClearOutput"
-                      value="Clear"
+                    <input type="button" id="btnClearOutput" value="Clear"
                       onclick="tester.clearOutput()"
                     /><br />
                   </td>
