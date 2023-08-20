@@ -12,6 +12,7 @@
         const tester = new Tester(OpenLayers)
         window.tester = tester
         tester.init()
+        tester.addTestXmls('./tests/testxml.json')
       }
     </script>
   </head>
@@ -34,56 +35,6 @@
                   </td>
                   <td>
                     <select name="selTestXml" id="selTestXml">
-                      <option selected="selected">
-                        &nbsp;---&nbsp;Select Below&nbsp;---&nbsp;
-                      </option>
-                      <option>./tests/general/TestBoundary.xml</option>
-                      <option>./tests/general/TestCentroid.xml</option>
-                      <option>./tests/general/TestConvexHull-big.xml</option>
-                      <option>./tests/general/TestConvexHull.xml</option>
-                      <option>./tests/general/TestFunctionAA.xml</option>
-                      <option>./tests/general/TestFunctionAAPrec.xml</option>
-                      <option>./tests/general/TestFunctionLA.xml</option>
-                      <option>./tests/general/TestFunctionLAPrec.xml</option>
-                      <option>./tests/general/TestFunctionLL.xml</option>
-                      <option>./tests/general/TestFunctionLLPrec.xml</option>
-                      <option>./tests/general/TestFunctionPA.xml</option>
-                      <option>./tests/general/TestFunctionPL.xml</option>
-                      <option>./tests/general/TestFunctionPLPrec.xml</option>
-                      <option>./tests/general/TestFunctionPP.xml</option>
-                      <option>./tests/general/TestInteriorPoint.xml</option>
-                      <!-- <option>./tests/general/TestRectanglePredicate.xml</option> -->
-                      <!-- multiple tests per one case not supported -->
-                      <option>./tests/general/TestRelateAA.xml</option>
-                      <option>./tests/general/TestRelateAC.xml</option>
-                      <option>./tests/general/TestRelateLA.xml</option>
-                      <option>./tests/general/TestRelateLC.xml</option>
-                      <option>./tests/general/TestRelateLL.xml</option>
-                      <option>./tests/general/TestRelatePA.xml</option>
-                      <option>./tests/general/TestRelatePL.xml</option>
-                      <option>./tests/general/TestRelatePP.xml</option>
-                      <option>./tests/general/TestSimple.xml</option>
-                      <option>./tests/general/TestValid.xml</option>
-                      <option>./tests/general/TestValid2-big.xml</option>
-                      <option>./tests/general/TestValid2.xml</option>
-                      <option>./tests/general/TestWithinDistance.xml</option>
-                      <!-- isWithinDistance function not supported in GEOS CAPI -->
-                      <option>
-                        ./tests/robust/TestRobustOverlayFixed.xml
-                      </option>
-                      <option>
-                        ./tests/robust/TestRobustOverlayFloat.xml
-                      </option>
-                      <option>./tests/robust/TestRobustRelate.xml</option>
-                      <option>./tests/validate/TestRelateAA-big.xml</option>
-                      <option>./tests/validate/TestRelateAA.xml</option>
-                      <option>./tests/validate/TestRelateAC.xml</option>
-                      <option>./tests/validate/TestRelateLA.xml</option>
-                      <option>./tests/validate/TestRelateLC.xml</option>
-                      <option>./tests/validate/TestRelateLL.xml</option>
-                      <option>./tests/validate/TestRelatePA.xml</option>
-                      <option>./tests/validate/TestRelatePL.xml</option>
-                      <option>./tests/validate/TestRelatePP.xml</option>
                     </select>
                     <input
                       type="button"

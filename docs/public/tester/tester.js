@@ -727,6 +727,22 @@ export default function Tester (engine) {
     }
   }
 
+  this.addTestXmls = async (testXmlJsonPath) => {
+    const res = await fetch(testXmlJsonPath)
+    const testXmlJson = await res.json()
+    const selTestXml = document.getElementById('selTestXml')
+    const optDefault = document.createElement('option')
+    optDefault.selected = true
+    optDefault.text = ' --- Select Below ---'
+    selTestXml.appendChild(optDefault)
+    for (let i = 0; i < testXmlJson.length; i++) {
+      const opt = document.createElement('option')
+      opt.text = testXmlJson[i]
+      opt.value = './tests/' + testXmlJson[i]
+      selTestXml.appendChild(opt)
+    }
+  }
+
   this.loadTestXml = () => {
     const optsTestXml = document.getElementById('selTestXml').options
     const optsTestCase = document.getElementById('selTestCase').options
@@ -737,14 +753,12 @@ export default function Tester (engine) {
       xmldom = null
       return
     }
-    const filename = optsTestXml[optsTestXml.selectedIndex].text
+    const filename = optsTestXml[optsTestXml.selectedIndex].value
 
     if (!isEmpty(xmlhttp)) {
       xmlhttp.open('get', filename, false)
       xmlhttp.send(null)
       xmldom = xmlhttp.responseXML
-    } else if (!isEmpty(xmldom)) {
-      xmldom.load(filename)
     }
 
     if (!isEmpty(xmldom)) {
