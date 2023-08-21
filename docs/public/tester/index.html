@@ -65,40 +65,88 @@
                         <img src="./images/binary-geom-function.png"/><span style="color:red">:binary</span>
                       )
                     </label>
-                    <select size="17" name="selOperation" id="selOperation" onchange="tester.updateOperation(this.value)">
-                      <option value="intersection" class="binary" selected="selected">&nbsp;&nbsp;&nbsp;intersection</option>
-                      <option value="buffer" class="unary">&nbsp;&nbsp;&nbsp;buffer</option>
-                      <option value="convexhull" class="unary">&nbsp;&nbsp;&nbsp;convexHull</option>
-                      <option value="difference" class="binary">&nbsp;&nbsp;&nbsp;difference</option>
-                      <option value="symdifference" class="binary">&nbsp;&nbsp;&nbsp;symDifference</option>
-                      <option value="getboundary" class="unary">&nbsp;&nbsp;&nbsp;boundary</option>
-                      <option value="union" class="binary">&nbsp;&nbsp;&nbsp;Union</option>
-                      <option value="pointonsurface" class="unary">&nbsp;&nbsp;&nbsp;pointOnSurface</option>
-                      <option value="getcentroid" class="unary">&nbsp;&nbsp;&nbsp;getCentroid</option>
-                      <option value="envelope" class="unary">&nbsp;&nbsp;&nbsp;getEnvelope</option>
-                      <option value="relate" class="binary">&nbsp;&nbsp;&nbsp;relate</option>
-                      <!-- <option value="polygonize" class="unary">&nbsp;&nbsp;&nbsp;polygonize</option> --> <!-- SWIG interface not supported -->
-                      <option value="linemerge" class="unary">&nbsp;&nbsp;&nbsp;lineMerge</option>
-                      <option value="simplify" class="unary">&nbsp;&nbsp;&nbsp;simplify</option>
-                      <option value="topologypreservesimplify" class="unary">&nbsp;&nbsp;&nbsp;topologyPreserveSimplify</option>
-                      <option value="relatepattern" class="binary">&nbsp;&nbsp;&nbsp;relatePattern</option>
-                      <option value="disjoint" class="binary">&nbsp;&nbsp;&nbsp;disjoint</option>
-                      <option value="touches" class="binary">&nbsp;&nbsp;&nbsp;touches</option>
-                      <option value="intersects" class="binary">&nbsp;&nbsp;&nbsp;intersects</option>
-                      <option value="crosses" class="binary">&nbsp;&nbsp;&nbsp;crosses</option>
-                      <option value="within" class="binary">&nbsp;&nbsp;&nbsp;within</option>
-                      <option value="contains" class="binary">&nbsp;&nbsp;&nbsp;contains</option>
-                      <option value="overlaps" class="binary">&nbsp;&nbsp;&nbsp;overlaps</option>
-                      <option value="equals" class="binary">&nbsp;&nbsp;&nbsp;equals</option>
-                      <option value="equalsexact" class="binary">&nbsp;&nbsp;&nbsp;equalsExact</option>
-                      <option value="isempty" class="unary">&nbsp;&nbsp;&nbsp;isEmpty</option>
-                      <option value="isvalid" class="unary">&nbsp;&nbsp;&nbsp;isValid</option>
-                      <option value="issimple" class="unary">&nbsp;&nbsp;&nbsp;isSimple</option>
-                      <option value="isring" class="unary">&nbsp;&nbsp;&nbsp;isRing</option>
-                      <option value="hasz" class="unary">&nbsp;&nbsp;&nbsp;hasZ</option>
-                      <option value="area" class="unary">&nbsp;&nbsp;&nbsp;area</option>
-                      <option value="length" class="unary">&nbsp;&nbsp;&nbsp;length</option>
-                      <option value="distance" class="binary">&nbsp;&nbsp;&nbsp;distance</option>
+                    <select size="17" name="selOperation" id="selOperation" onchange="tester.updateOperation(this.selectedOptions[0].text)">
+                      <optgroup label="Geometry">
+                        <option value="GEOSGeom_clone" class="unary">clone</option>
+                        <option value="GEOSEnvelope" class="unary" selected="selected">envelope</option>
+                        <option value="GEOSHasZ" class="unary">hasZ</option>
+                        <!-- <option value="GEOSHasM" class="unary">hasM</option> -->
+                        <option value="GEOSisEmpty" class="unary">isEmpty</option>
+                        <option value="GEOSLineMerge" class="unary">lineMerge</option>
+                        <option value="GEOSNormalize" class="unary">normalize</option>
+                        <option value="GEOSGeom_setPrecision" class="unary">setPrecision</option>
+                        <option value="GEOSReverse" class="unary">reverse</option>
+                      </optgroup>
+                      <optgroup label="Metric">
+                        <option value="GEOSArea" class="unary">area</option>
+                        <option value="GEOSLength" class="unary">length</option>
+                      </optgroup>
+                      <optgroup label="Validity">
+                        <option value="GEOSisSimple" class="unary">isSimple</option>
+                        <option value="GEOSisValid" class="unary">isValid</option>
+                        <option value="GEOSMakeValid" class="unary">makeValid</option>
+                      </optgroup>
+                      <optgroup label="Construction">
+                        <option value="GEOSBoundary" class="unary">boundary</option>
+                        <option value="GEOSBuffer" class="unary">buffer</option>
+                        <option value="GEOSBufferWithStyle" class="unary">bufferWithStyle</option>
+                        <option value="GEOSOffsetCurve" class="unary">offsetCurve</option>
+                        <option value="GEOSGetCentroid" class="unary">getCentroid</option>
+                        <option value="GEOSConvexHull" class="unary">convexHull</option>
+                        <!-- <option value="GEOSConcaveHull" class="unary">concaveHull</option> -->
+                        <option value="GEOSDensify" class="unary">densify</option>
+                        <option value="GEOSPointOnSurface" class="unary">pointOnSurface</option>
+                        <option value="GEOSLargestEmptyCircle" class="unary">largestEmptyCircle</option>
+                        <option value="GEOSMaximumInscribedCircle" class="unary">maximumInscribedCircle</option>
+                        <option value="GEOSMinimumBoundingCircle" class="unary">minimumBoundingCircle</option>
+                        <option value="GEOSMinimumWidth" class="unary">minimumWidth</option>
+                        <option value="GEOSDelaunayTriangulation" class="unary">delaunayTriangulation</option>
+                        <option value="GEOSConstrainedDelaunayTriangulation" class="unary">constrainedDelaunayTriangulation</option>
+                        <option value="GEOSVoronoiDiagram" class="unary">voronoiDiagram</option>
+                        <!-- <option value="GEOSPolygonize" class="unary">polygonize</option> -->
+                        <!-- <option value="GEOSPolygonize_valid" class="unary">polygonizeValid</option> -->
+                        <option value="GEOSBuildArea" class="unary">buildArea</option>
+                        <option value="GEOSSimplify" class="unary">simplify</option>
+                        <option value="GEOSTopologyPreserveSimplify" class="unary">topologyPreserveSimplify</option>
+                      </optgroup>
+                      <optgroup label="Distance">
+                        <option value="GEOSDistance" class="binary">distance</option>
+                        <option value="GEOSNearestPoints" class="binary">nearestPoints</option>
+                        <option value="GEOSFrechetDistance" class="binary">frechetDistance</option>
+                        <option value="GEOSHausdorffDistance" class="binary">hausdorffDistance</option>
+                      </optgroup>
+                      <optgroup label="Spatial Relationship">
+                        <option value="GEOSContains" class="binary">contains</option>
+                        <option value="GEOSCoveredBy" class="binary">coveredBy</option>
+                        <option value="GEOSCovers" class="binary">covers</option>
+                        <option value="GEOSCrosses" class="binary">crosses</option>
+                        <option value="GEOSDisjoint" class="binary">disjoint</option>
+                        <option value="GEOSEquals" class="binary">equals</option>
+                        <option value="GEOSEqualsExact" class="binary">equalsExact</option>
+                        <option value="GEOSIntersects" class="binary">intersects</option>
+                        <option value="GEOSOverlaps" class="binary">overlaps</option>
+                        <option value="GEOSTouches" class="binary">touches</option>
+                        <option value="GEOSWithin" class="binary">within</option>
+                        <!-- <option value="GEOSRelate" class="binary">relate</option> -->
+                        <option value="GEOSRelatePattern" class="binary">relatePattern</option>
+                        <option value="GEOSRelateBoundaryNodeRule" class="binary">relateBoundaryNodeRule</option>
+                      </optgroup>
+                      <optgroup label="Overlay">
+                        <option value="GEOSDifference" class="binary">difference</option>
+                        <option value="GEOSIntersection" class="binary">intersection</option>
+                        <option value="GEOSSymDifference" class="binary">symDifference</option>
+                        <option value="GEOSUnaryUnion" class="unary">unaryUnion</option>
+                        <option value="GEOSUnion" class="binary">union</option>
+                        <option value="GEOSNode" class="unary">node</option>
+                        <option value="GEOSClipByRect" class="binary">clipByRect</option>
+                      </optgroup>
+                      <optgroup label="Linear Referencing">
+                        <option value="GEOSInterpolate" class="unary">interpolate</option>
+                        <option value="GEOSProject" class="binary">project</option>
+                      </optgroup>
+                      <optgroup label="Coverage">
+                        <option value="GEOSCoverageUnion" class="binary">coverageUnion</option>
+                      </optgroup>
                     </select>
                   </td>
                 </tr>
@@ -129,6 +177,30 @@
                   </td>
                   <td class="argtext">
                     <input type="text" id="txtArg3" class="txtArg" />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="arglabel">
+                    <label for="txtArg4" id="lblArg4">Argument4</label>
+                  </td>
+                  <td class="argtext">
+                    <input type="text" id="txtArg4" class="txtArg" />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="arglabel">
+                    <label for="txtArg5" id="lblArg5">Argument5</label>
+                  </td>
+                  <td class="argtext">
+                    <input type="text" id="txtArg5" class="txtArg" />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="arglabel">
+                    <label for="txtArg6" id="lblArg6">Argument6</label>
+                  </td>
+                  <td class="argtext">
+                    <input type="text" id="txtArg6" class="txtArg" />
                   </td>
                 </tr>
                 <tr>

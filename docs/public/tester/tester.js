@@ -120,7 +120,7 @@ export default function Tester (engine) {
     result = ''
     expected = ''
     document.getElementById('radA').click()
-    updateOperation('intersection')
+    self.updateOperation('envelope')
 
     // load embedded objects
     const url = location.toString()
@@ -453,63 +453,103 @@ export default function Tester (engine) {
     txtArg.disabled = disabled
   }
 
-  const updateOperation = (opname, arg1, arg2, arg3) => {
+  this.updateOperation = (opname, arg1, arg2, arg3, arg4, arg5, arg6) => {
     const selOperation = document.getElementById('selOperation')
-    if (selOperation.value !== opname.toLowerCase()) {
+    if (selOperation.selectedIndex >= 0 &&
+        selOperation.selectedOptions[0].text.toLowerCase() !== opname.toLowerCase()) {
       const optsOperation = selOperation.options
       for (let i = 0; i < optsOperation.length; i++) {
-        if (optsOperation[i].value === opname.toLowerCase()) {
+        if (optsOperation[i].text.toLowerCase() === opname.toLowerCase()) {
           optsOperation[i].selected = true
           break
         }
       }
     }
     setArgument(1, 'Geometry', 'A', true)
+    setArgument(2, '', '', true)
+    setArgument(3, '', '', true)
+    setArgument(4, '', '', true)
+    setArgument(5, '', '', true)
+    setArgument(6, '', '', true)
     switch (opname.toLowerCase()) {
       // simple unary
-      case 'convexhull':
-      case 'getboundary':
-      case 'pointonsurface':
-      case 'getcentroid':
+      case 'clone':
       case 'envelope':
       case 'linemerge':
-      case 'isempty':
-      case 'isvalid':
-      case 'issimple':
-      case 'isring':
+      case 'normalize':
+      case 'reverse':
+      case 'makevalid':
+      case 'boundary':
+      case 'getcentroid':
+      case 'convexhull':
+      case 'pointonsurface':
+      case 'minimumboundingcircle':
+      case 'minimumwidth':
+      case 'delaunaytriangulation':
+      case 'constraineddelaunaytriangulation':
+      case 'voronoidiagram':
+      case 'buildarea':
+      case 'unaryunion':
+      case 'node':
+      case 'coverageunion':
       case 'hasz':
+      case 'isempty':
+      case 'issimple':
+      case 'isvalid':
       case 'area':
       case 'length':
-        setArgument(2, '', '', true)
-        setArgument(3, '', '', true)
         break
       // simple binary
-      case 'intersection':
+      case 'nearestpoints':
       case 'difference':
+      case 'intersection':
       case 'symdifference':
       case 'union':
-      case 'relate':
-      case 'disjoint':
-      case 'touches':
-      case 'intersects':
-      case 'crosses':
-      case 'within':
+      case 'clipbyrect':
       case 'contains':
-      case 'overlaps':
+      case 'coveredby':
+      case 'covers':
+      case 'crosses':
+      case 'disjoint':
       case 'equals':
+      case 'intersects':
+      case 'overlaps':
+      case 'touches':
+      case 'within':
+      case 'project':
       case 'distance':
+      case 'frechetdistance':
+      case 'hausdorffdistance':
         setArgument(2, 'Geometry', 'B', true)
-        setArgument(3, '', '', true)
+        break
+      case 'setprecision':
+        setArgument(2, 'Precision', '0.1', false)
+        setArgument(3, 'Flags', '2', false)
         break
       case 'buffer':
-        setArgument(2, 'Distance', '10', false)
+        setArgument(2, 'Width', '10', false)
         setArgument(3, 'Quadrant Segs', '8', false)
         break
+      case 'bufferwithstyle':
+        setArgument(2, 'Width', '10', false)
+        setArgument(3, 'Quadrant Segs', '8', false)
+        setArgument(4, 'End Cap Style', '1', false)
+        setArgument(5, 'Join Style', '1', false)
+        setArgument(6, 'Mitre Limit', '10', false)
+        break
+      case 'offsetcurve':
+        setArgument(2, 'Width', '10', false)
+        setArgument(3, 'Quadrant Segs', '8', false)
+        setArgument(4, 'Join Style', '1', false)
+        setArgument(5, 'Mitre Limit', '10', false)
+        break
+      case 'densify':
+      case 'maximuminscribedcircle':
       case 'simplify':
       case 'topologypreservesimplify':
         setArgument(2, 'Tolerance', '10', false)
-        setArgument(3, '', '', true)
         break
+      case 'largestemptycircle':
       case 'equalsexact':
         setArgument(2, 'Geometry', 'B', true)
         setArgument(3, 'Tolerance', '0.00001', false) // TODO: reasonable initial value
@@ -517,6 +557,13 @@ export default function Tester (engine) {
       case 'relatepattern':
         setArgument(2, 'Geometry', 'B', true)
         setArgument(3, 'Pattern', 'FFFFFFFFF', false) // TODO: reasonable initial value
+        break
+      case 'relateboundarynoderule':
+        setArgument(2, 'Geometry', 'B', true)
+        setArgument(3, 'Boundary Node Rule', '1', false)
+        break
+      case 'interpolate':
+        setArgument(2, 'Distance', '10', false)
         break
       default:
         alert('"' + opname + '" operation not supported.')
@@ -530,6 +577,15 @@ export default function Tester (engine) {
     }
     if (!isEmpty(arg3)) {
       document.getElementById('txtArg3').value = arg3
+    }
+    if (!isEmpty(arg4)) {
+      document.getElementById('txtArg4').value = arg4
+    }
+    if (!isEmpty(arg5)) {
+      document.getElementById('txtArg5').value = arg5
+    }
+    if (!isEmpty(arg6)) {
+      document.getElementById('txtArg6').value = arg6
     }
     return true
   }
@@ -548,10 +604,8 @@ export default function Tester (engine) {
     }
 
     const opts = document.getElementById('selOperation').options
-    const opname = opts[opts.selectedIndex].value
-    let fncname = opts[opts.selectedIndex].text
-    fncname = fncname.replace(/\W+/g, '')
-    fncname = 'GEOS' + fncname[0].toUpperCase() + fncname.substr(1)
+    const opname = opts[opts.selectedIndex].text
+    const fncname = opts[opts.selectedIndex].value
 
     if (isEmpty(self.featureA)) {
       alert('all operation needs Geometry A.')
@@ -571,12 +625,25 @@ export default function Tester (engine) {
 
     switch (opname.toLowerCase()) {
       // simple unary (return geometry)
-      case 'convexhull':
-      case 'getboundary':
-      case 'pointonsurface':
-      case 'getcentroid':
+      case 'clone':
       case 'envelope':
       case 'linemerge':
+      case 'normalize':
+      case 'reverse':
+      case 'makevalid':
+      case 'boundary':
+      case 'getcentroid':
+      case 'convexhull':
+      case 'pointonsurface':
+      case 'minimumboundingcircle':
+      case 'minimumwidth':
+      case 'delaunaytriangulation':
+      case 'constraineddelaunaytriangulation':
+      case 'voronoidiagram':
+      case 'buildarea':
+      case 'unaryunion':
+      case 'node':
+      case 'coverageunion':
         if (!isEmpty(geos)) {
           geomResult = geos[fncname](geomA)
           result = geos.GEOSWKTWriter_write(writer, geomResult)
@@ -588,11 +655,10 @@ export default function Tester (engine) {
         loadOutput()
         break
       // simple unary (return scalar (boolean))
-      case 'isempty':
-      case 'isvalid':
-      case 'issimple':
-      case 'isring':
       case 'hasz':
+      case 'isempty':
+      case 'issimple':
+      case 'isvalid':
         if (!isEmpty(geos)) {
           result = geos[fncname](geomA)
           result = result.toString()
@@ -612,13 +678,15 @@ export default function Tester (engine) {
         self.updateOutput()
         break
       // simple binary (return geometry)
-      case 'intersection':
+      case 'nearestpoints':
       case 'difference':
+      case 'intersection':
       case 'symdifference':
       case 'union':
+      case 'clipbyrect':
         if (!isEmpty(geos)) {
           if (isEmpty(self.featureB)) {
-            alert('"' + fncname + '" operation needs Geometry B.')
+            alert('"' + opname + '" operation needs Geometry B.')
             return
           }
           geomB = geos.GEOSWKTReader_read(reader, toWkt(self.featureB))
@@ -631,19 +699,21 @@ export default function Tester (engine) {
         self.updateOutput()
         loadOutput()
         break
-      case 'relate':
-      case 'disjoint':
-      case 'touches':
-      case 'intersects':
-      case 'crosses':
-      case 'within':
+      // simple binary (return scalar (boolean))
       case 'contains':
-      case 'overlaps':
+      case 'coveredby':
+      case 'covers':
+      case 'crosses':
+      case 'disjoint':
       case 'equals':
-      case 'distance':
+      case 'intersects':
+      case 'overlaps':
+      case 'touches':
+      case 'within':
+      case 'project':
         if (!isEmpty(geos)) {
           if (isEmpty(self.featureB)) {
-            alert('"' + fncname + '" operation needs Geometry B.')
+            alert('"' + opname + '" operation needs Geometry B.')
             return
           }
           geomB = geos.GEOSWKTReader_read(reader, toWkt(self.featureB))
@@ -652,21 +722,46 @@ export default function Tester (engine) {
         }
         self.updateOutput()
         break
-      case 'buffer':
+      // simple binary (return scalar (double))
+      case 'distance':
+      case 'frechetdistance':
+      case 'hausdorffdistance':
         if (!isEmpty(geos)) {
-          let distance = document.getElementById('txtArg2').value
-          if (isNaN(distance)) {
-            alert('Distance value must be number.')
+          if (isEmpty(self.featureB)) {
+            alert('"' + opname + '" operation needs Geometry B.')
             return
           }
-          distance = parseFloat(distance)
-          let quadsegs = document.getElementById('txtArg3').value
-          if (isNaN(quadsegs)) {
-            alert('Quadrant Segs value must be number.')
+          geomB = geos.GEOSWKTReader_read(reader, toWkt(self.featureB))
+          const valuePtr = geos.Module._malloc(8)
+          result = geos[fncname](geomA, geomB, valuePtr)
+          const value = geos.Module.getValue(valuePtr, 'double')
+          result = value.toString()
+          geos.Module._free(valuePtr)
+        }
+        self.updateOutput()
+        break
+      // has arguments
+      case 'setprecision':
+        if (!isEmpty(geos)) {
+          let precision = document.getElementById('txtArg2').value
+          if (isNaN(precision)) {
+            alert('Precision value must be number.')
             return
           }
-          quadsegs = parseInt(quadsegs)
-          geomResult = geos[fncname](geomA, distance, quadsegs)
+          precision = parseFloat(precision)
+
+          let flags = document.getElementById('txtArg3').value
+          if (isNaN(flags)) {
+            flags = 0
+          } else {
+            flags = parseInt(flags)
+            if (flags < 0 || flags > 2) {
+              alert('Flags value must be 0-2.')
+              return
+            }
+          }
+
+          geomResult = geos[fncname](geomA, precision, flags)
           result = geos.GEOSWKTWriter_write(writer, geomResult)
           if (!isEmpty(expected)) {
             expected = geos.GEOSWKTWriter_write(writer, geos.GEOSWKTReader_read(reader, expected))
@@ -675,6 +770,130 @@ export default function Tester (engine) {
         self.updateOutput()
         loadOutput()
         break
+      case 'buffer':
+        if (!isEmpty(geos)) {
+          let width = document.getElementById('txtArg2').value
+          if (isNaN(width)) {
+            alert('Width value must be number.')
+            return
+          }
+          width = parseFloat(width)
+
+          let quadsegs = document.getElementById('txtArg3').value
+          if (isNaN(quadsegs)) {
+            alert('Quadrant Segs value must be number.')
+            return
+          }
+          quadsegs = parseInt(quadsegs)
+
+          geomResult = geos[fncname](geomA, width, quadsegs)
+          result = geos.GEOSWKTWriter_write(writer, geomResult)
+          if (!isEmpty(expected)) {
+            expected = geos.GEOSWKTWriter_write(writer, geos.GEOSWKTReader_read(reader, expected))
+          }
+        }
+        self.updateOutput()
+        loadOutput()
+        break
+      case 'bufferwithstyle':
+        if (!isEmpty(geos)) {
+          let width = document.getElementById('txtArg2').value
+          if (isNaN(width)) {
+            alert('Width value must be number.')
+            return
+          }
+          width = parseFloat(width)
+
+          let quadsegs = document.getElementById('txtArg3').value
+          if (isNaN(quadsegs)) {
+            alert('Quadrant Segs value must be number.')
+            return
+          }
+          quadsegs = parseInt(quadsegs)
+
+          let endCapStyle = document.getElementById('txtArg4').value
+          if (isNaN(endCapStyle)) {
+            alert('End Cap Style value must be number (1-3).')
+            return
+          }
+          endCapStyle = parseInt(endCapStyle)
+          if (endCapStyle < 1 || endCapStyle > 3) {
+            alert('End Cap Style value must be 1-3.')
+            return
+          }
+
+          let joinStyle = document.getElementById('txtArg5').value
+          if (isNaN(joinStyle)) {
+            alert('Join Style value must be number (1-3).')
+            return
+          }
+          joinStyle = parseInt(joinStyle)
+          if (joinStyle < 1 || joinStyle > 3) {
+            alert('Join Style value must be 1-3.')
+            return
+          }
+
+          let mitreLimit = document.getElementById('txtArg6').value
+          if (isNaN(mitreLimit)) {
+            alert('Mitre Limit value must be number.')
+            return
+          }
+          mitreLimit = parseFloat(mitreLimit)
+
+          geomResult = geos[fncname](geomA, width, quadsegs, endCapStyle, joinStyle, mitreLimit)
+          result = geos.GEOSWKTWriter_write(writer, geomResult)
+          if (!isEmpty(expected)) {
+            expected = geos.GEOSWKTWriter_write(writer, geos.GEOSWKTReader_read(reader, expected))
+          }
+        }
+        self.updateOutput()
+        loadOutput()
+        break
+      case 'offsetcurve':
+        if (!isEmpty(geos)) {
+          let width = document.getElementById('txtArg2').value
+          if (isNaN(width)) {
+            alert('Width value must be number.')
+            return
+          }
+          width = parseFloat(width)
+
+          let quadsegs = document.getElementById('txtArg3').value
+          if (isNaN(quadsegs)) {
+            alert('Quadrant Segs value must be number.')
+            return
+          }
+          quadsegs = parseInt(quadsegs)
+
+          let joinStyle = document.getElementById('txtArg4').value
+          if (isNaN(joinStyle)) {
+            alert('Join Style value must be number (1-3).')
+            return
+          }
+          joinStyle = parseInt(joinStyle)
+          if (joinStyle < 1 || joinStyle > 3) {
+            alert('Join Style value must be 1-3.')
+            return
+          }
+
+          let mitreLimit = document.getElementById('txtArg5').value
+          if (isNaN(mitreLimit)) {
+            alert('Mitre Limit value must be number.')
+            return
+          }
+          mitreLimit = parseFloat(mitreLimit)
+
+          geomResult = geos[fncname](geomA, width, quadsegs, joinStyle, mitreLimit)
+          result = geos.GEOSWKTWriter_write(writer, geomResult)
+          if (!isEmpty(expected)) {
+            expected = geos.GEOSWKTWriter_write(writer, geos.GEOSWKTReader_read(reader, expected))
+          }
+        }
+        self.updateOutput()
+        loadOutput()
+        break
+      case 'densify':
+      case 'maximuminscribedcircle':
       case 'simplify':
       case 'topologypreservesimplify':
         if (!isEmpty(geos)) {
@@ -684,6 +903,7 @@ export default function Tester (engine) {
             return
           }
           tolerance = parseFloat(tolerance)
+
           geomResult = geos[fncname](geomA, tolerance)
           result = geos.GEOSWKTWriter_write(writer, geomResult)
           if (!isEmpty(expected)) {
@@ -693,6 +913,7 @@ export default function Tester (engine) {
         self.updateOutput()
         loadOutput()
         break
+      case 'largestemptycircle':
       case 'equalsexact':
         if (!isEmpty(geos)) {
           let tolerance = document.getElementById('txtArg3').value
@@ -701,8 +922,9 @@ export default function Tester (engine) {
             return
           }
           tolerance = parseFloat(tolerance)
+
           if (isEmpty(self.featureB)) {
-            alert('"' + fncname + '" operation needs Geometry B.')
+            alert('"' + opname + '" operation needs Geometry B.')
             return
           }
           geomB = geos.GEOSWKTReader_read(reader, toWkt(self.featureB))
@@ -715,7 +937,7 @@ export default function Tester (engine) {
         if (!isEmpty(geos)) {
           const pattern = document.getElementById('txtArg3').value
           if (isEmpty(self.featureB)) {
-            alert('"' + fncname + '" operation needs Geometry B.')
+            alert('"' + opname + '" operation needs Geometry B.')
             return
           }
           geomB = geos.GEOSWKTReader_read(reader, toWkt(self.featureB))
@@ -723,6 +945,46 @@ export default function Tester (engine) {
           result = result.toString()
         }
         self.updateOutput()
+        break
+      case 'relateboundarynoderule':
+        if (!isEmpty(geos)) {
+          let bnr = document.getElementById('txtArg3').value
+          if (isNaN(bnr)) {
+            alert('Boundary Node Rule value must be number (1-4).')
+            return
+          } else {
+            bnr = parseInt(bnr)
+            if (bnr < 1 || bnr > 4) {
+              alert('Boundary Node Rule value must be number (1-4).')
+              return
+            }
+          }
+          if (isEmpty(self.featureB)) {
+            alert('"' + opname + '" operation needs Geometry B.')
+            return
+          }
+          geomB = geos.GEOSWKTReader_read(reader, toWkt(self.featureB))
+          result = geos[fncname](geomA, geomB, bnr)
+          result = result.toString()
+        }
+        self.updateOutput()
+        break
+      case 'interpolate':
+        if (!isEmpty(geos)) {
+          let distance = document.getElementById('txtArg2').value
+          if (isNaN(distance)) {
+            alert('Distance value must be number.')
+            return
+          }
+          distance = parseFloat(distance)
+          geomResult = geos[fncname](geomA, distance)
+          result = geos.GEOSWKTWriter_write(writer, geomResult)
+          if (!isEmpty(expected)) {
+            expected = geos.GEOSWKTWriter_write(writer, geos.GEOSWKTReader_read(reader, expected))
+          }
+        }
+        self.updateOutput()
+        loadOutput()
         break
     }
   }
@@ -799,24 +1061,48 @@ export default function Tester (engine) {
     const arg1 = nodeOp.getAttribute('arg1')
     const arg2 = nodeOp.getAttribute('arg2')
     const arg3 = nodeOp.getAttribute('arg3')
+    const arg4 = nodeOp.getAttribute('arg4')
+    const arg5 = nodeOp.getAttribute('arg5')
+    const arg6 = nodeOp.getAttribute('arg6')
     let exp = nodeOp.firstChild.data
     exp = exp.replace(/^\s+|\n|\s+$/g, '')
-    switch (opname) {
-      case 'relate':
-        opname = 'relatepattern'
+    switch (opname.toLowerCase()) {
+      case 'copy':
+        opname = 'clone'
         break
-      case 'getInteriorPoint':
-        opname = 'pointonsurface'
+      case 'reduceprecision':
+        opname = 'setPrecision'
+        break
+      case 'getboundary':
+        opname = 'boundary'
+        break
+      case 'getinteriorpoint':
+        opname = 'pointOnSurface'
+        break
+      case 'simplifydp':
+        opname = 'simplify'
+        break
+      case 'simplifytp':
+        opname = 'topologyPreserveSimplify'
+        break
+      case 'relate':
+        opname = 'relatePattern'
+        break
+      case 'relatebnr':
+        opname = 'relateBoundaryNodeRule'
+        break
+      case 'cliprect':
+        opname = 'clipByRect'
         break
     }
-    // alert('a:\t' + a + '\nb:\t' + b + '\nopname:\t' + opname + '\narg1:\t' + arg1 + '\narg2:\t' + arg2 + '\narg3:\t' + arg3)
+    // console.log(`a:\t${a}\nb:\t${b}\nopname:\t${opname}\narg1:\t${arg1}\narg2:\t${arg2}\narg3:\t${arg3}\narg4:\t${arg4}\narg5:\t${arg5}\narg6:\t${arg6}\nexp:\t${exp}`)
     loadInput(a, 'a')
     self.updateInput()
     if (!isEmpty(b)) {
       loadInput(b, 'b')
       self.updateInput()
     }
-    if (updateOperation(opname, arg1, arg2, arg3)) {
+    if (self.updateOperation(opname, arg1, arg2, arg3, arg4, arg5, arg6)) {
       self.compute(exp)
     }
   }
