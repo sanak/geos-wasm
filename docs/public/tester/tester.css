@@ -1,91 +1,63 @@
-td {
-  padding: 2px;
-  vertical-align: center;
+.main {
+  display: grid;
+  grid-template-areas: "top top" "left right" "bottom bottom";
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: auto 1fr auto;
+  grid-gap: 4px;
+  height: auto;
 }
+.top {
+  grid-area: top;
+}
+.left {
+  grid-area: left;
+  min-width: 230px;
+  max-height: 500px;
+}
+.right {
+  grid-area: right;
+  min-height: 380px;
+  max-height: 500px;
+}
+.bottom {
+  grid-area: bottom;
+  min-height: 150px;
+}
+
+.top div
+{
+  margin-top: 2px;
+}
+.left div
+{
+  margin-top: 4px;
+}
+.bottom div
+{
+  margin-top: 2px;
+}
+
+.top > div > label {
+  display: inline-block;
+  width: 70px;
+}
+
 #selTestXml {
-  width: 300px;
+  min-width: auto;
 }
 #selTestCase {
-  width: 500px;
+  min-width: auto;
 }
-#controlpanel {
-  top: 0;
-  padding: 0;
-  width: 226px;
-  height: 426px;
+.left {
+  display: flex;
+  flex-direction: column;
 }
-#selOperation {
-  width: 100%;
+.operation {
+  flex: 1;
 }
-#map {
-  width: 426px;
-  height: 426px;
-  border: 1px solid #ccc;
-}
-#txtInput {
-  font-size: 0.85em;
-  width: 100%;
-  height: 100%;
-}
-#txtOutput {
-  font-size: 0.85em;
-  width: 100%;
-  height: 100%;
-}
-#iopanel {
-  height: 150px;
-}
-#lblA {
-  color: blue;
-}
-#lblB {
-  color: red;
-}
-#lblResult {
-  color: #acd62b;
-}
-#lblExpected {
-  color: #2bd656;
-}
-p {
-  margin: 0;
-  padding: 0.75em 0 0.75em 0;
-}
-td.testlabel {
-  width: 90px;
-}
-table.tests {
-  width: 100%;
-}
-table.controls {
-  width: 100%;
-  height: 100%;
-}
-td.controlpanel {
-  vertical-align: center;
-}
-td.arglabel {
-  width: 120px;
-}
-td.argtext {
-  text-align: right;
-}
-input.txtArg {
-  width: 100px;
-  text-align: right;
-}
-td.iolabel {
-  width: 90px;
-  height: 75px;
-  list-style: none;
-  vertical-align: top;
-}
-td.iobutton {
-  vertical-align: top;
-  text-align: center;
-}
-td.iotext {
-  width: 500px;
+.operation > label {
+  display: inline-block;
+  min-width: 70px;
 }
 option.unary {
   background-image: url("./images/unary-geom-function.png");
@@ -96,4 +68,110 @@ option.binary {
   background-image: url("./images/binary-geom-function.png");
   background-repeat: no-repeat;
   color: red;
+}
+#selOperation {
+  width: 100%;
+}
+.args {
+  flex: 1;
+}
+.arg {
+  display: none;
+}
+.arg > label {
+  display: inline-block;
+  text-align: right;
+  width: 120px;
+}
+.arg > input {
+  width: 100px;
+  text-align: right;
+}
+.compute {
+  text-align: center;
+}
+
+#map {
+  max-height: 470px;
+  border: 1px solid #ccc;
+}
+.map-status {
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+#iopanel {
+  height: 150px;
+}
+.io {
+  display: flex;
+}
+.iolabel {
+  min-width: 90px;
+  height: 75px;
+}
+.iobutton {
+  min-width: 60px;
+  vertical-align: top;
+  text-align: center;
+}
+.iotext {
+  flex: 1;
+}
+#lblA {
+  color: blue;
+}
+#lblB {
+  color: red;
+}
+#txtInput {
+  font-size: 0.85em;
+  width: 100%;
+  min-height: 75px;
+}
+#lblResult {
+  color: #acd62b;
+}
+#lblExpected {
+  color: #2bd656;
+}
+#txtOutput {
+  font-size: 0.85em;
+  width: 100%;
+  min-height: 75px;
+}
+
+p {
+  margin: 0;
+  padding: 0.75em 0 0.75em 0;
+}
+
+/* mobile specific */
+@media only screen and (max-width: 600px) {
+  .main {
+    display: grid;
+    grid-template-areas: "top" "left" "right" "bottom";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+    grid-gap: 4px;
+    height: auto;
+  }
+  .operation {
+    display: inline-flex;
+  }
+  #selOperation {
+    width: 300px;
+    margin-left: 4px;
+  }
+  .args {
+    margin-left: 74px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .arg > label {
+    text-align: left;
+    width: auto;
+  }
 }

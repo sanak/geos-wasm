@@ -444,9 +444,11 @@ export default function Tester (engine) {
     txtOutput.style.backgroundColor = '#ffffff'
   }
 
-  const setArgument = (idx, label, value, disabled) => {
+  const setArgument = (idx, label, value, visible, disabled) => {
+    const divArg = document.getElementById('divArg' + idx)
     const lblArg = document.getElementById('lblArg' + idx)
     const txtArg = document.getElementById('txtArg' + idx)
+    divArg.style.display = visible ? 'block' : 'none'
     lblArg.textContent = label // FireFox
     lblArg.innerText = label // IE
     txtArg.value = value
@@ -465,12 +467,12 @@ export default function Tester (engine) {
         }
       }
     }
-    setArgument(1, 'Geometry', 'A', true)
-    setArgument(2, '', '', true)
-    setArgument(3, '', '', true)
-    setArgument(4, '', '', true)
-    setArgument(5, '', '', true)
-    setArgument(6, '', '', true)
+    setArgument(1, 'Geometry', 'A', true, true)
+    setArgument(2, '', '', false, true)
+    setArgument(3, '', '', false, true)
+    setArgument(4, '', '', false, true)
+    setArgument(5, '', '', false, true)
+    setArgument(6, '', '', false, true)
     switch (opname.toLowerCase()) {
       // simple unary
       case 'clone':
@@ -520,50 +522,50 @@ export default function Tester (engine) {
       case 'distance':
       case 'frechetdistance':
       case 'hausdorffdistance':
-        setArgument(2, 'Geometry', 'B', true)
+        setArgument(2, 'Geometry', 'B', true, true)
         break
       case 'setprecision':
-        setArgument(2, 'Precision', '0.1', false)
-        setArgument(3, 'Flags', '2', false)
+        setArgument(2, 'Precision', '0.1', true, false)
+        setArgument(3, 'Flags', '2', true, false)
         break
       case 'buffer':
-        setArgument(2, 'Width', '10', false)
-        setArgument(3, 'Quadrant Segs', '8', false)
+        setArgument(2, 'Width', '10', true, false)
+        setArgument(3, 'Quadrant Segs', '8', true, false)
         break
       case 'bufferwithstyle':
-        setArgument(2, 'Width', '10', false)
-        setArgument(3, 'Quadrant Segs', '8', false)
-        setArgument(4, 'End Cap Style', '1', false)
-        setArgument(5, 'Join Style', '1', false)
-        setArgument(6, 'Mitre Limit', '10', false)
+        setArgument(2, 'Width', '10', true, false)
+        setArgument(3, 'Quadrant Segs', '8', true, false)
+        setArgument(4, 'End Cap Style', '1', true, false)
+        setArgument(5, 'Join Style', '1', true, false)
+        setArgument(6, 'Mitre Limit', '10', true, false)
         break
       case 'offsetcurve':
-        setArgument(2, 'Width', '10', false)
-        setArgument(3, 'Quadrant Segs', '8', false)
-        setArgument(4, 'Join Style', '1', false)
-        setArgument(5, 'Mitre Limit', '10', false)
+        setArgument(2, 'Width', '10', true, false)
+        setArgument(3, 'Quadrant Segs', '8', true, false)
+        setArgument(4, 'Join Style', '1', true, false)
+        setArgument(5, 'Mitre Limit', '10', true, false)
         break
       case 'densify':
       case 'maximuminscribedcircle':
       case 'simplify':
       case 'topologypreservesimplify':
-        setArgument(2, 'Tolerance', '10', false)
+        setArgument(2, 'Tolerance', '10', true, false)
         break
       case 'largestemptycircle':
       case 'equalsexact':
-        setArgument(2, 'Geometry', 'B', true)
-        setArgument(3, 'Tolerance', '0.00001', false) // TODO: reasonable initial value
+        setArgument(2, 'Geometry', 'B', true, true)
+        setArgument(3, 'Tolerance', '0.00001', true, false) // TODO: reasonable initial value
         break
       case 'relatepattern':
-        setArgument(2, 'Geometry', 'B', true)
-        setArgument(3, 'Pattern', 'FFFFFFFFF', false) // TODO: reasonable initial value
+        setArgument(2, 'Geometry', 'B', true, true)
+        setArgument(3, 'Pattern', 'FFFFFFFFF', true, false) // TODO: reasonable initial value
         break
       case 'relateboundarynoderule':
-        setArgument(2, 'Geometry', 'B', true)
-        setArgument(3, 'Boundary Node Rule', '1', false)
+        setArgument(2, 'Geometry', 'B', true, true)
+        setArgument(3, 'Boundary Node Rule', '1', true, false)
         break
       case 'interpolate':
-        setArgument(2, 'Distance', '10', false)
+        setArgument(2, 'Distance', '10', true, false)
         break
       default:
         alert('"' + opname + '" operation not supported.')

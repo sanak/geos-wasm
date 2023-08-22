@@ -97,12 +97,12 @@
          width            : 100%;
      }
      #map {
-         background : #7391ad;
+         /* background : #7391ad; */
          width      : 100%;
      }
      #map {
          border : 0;
-         height : 250px;
+         height : 350px;
      }
      #title {
          font-size   : 1.3em;

@@ -1,5 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>GEOS WASM Tester</title>
     <link rel="stylesheet" href="./lib/ol2/theme/default/style.css" type="text/css" />
     <link rel="stylesheet" href="./lib/ol2/theme/default/style-patch.css" type="text/css" />
@@ -23,253 +26,215 @@
 
     <p id="shortdesc">Demonstrate GEOS WASM</p>
 
-    <table id="panels">
-      <tbody>
-        <tr>
-          <td id="testpanel" colspan="2">
-            <table class="tests">
-              <tbody>
-                <tr>
-                  <td class="testlabel">
-                    <label for="selTestXml">TestXml</label>
-                  </td>
-                  <td>
-                    <select name="selTestXml" id="selTestXml"></select>
-                    <input type="button" id="btnLoad" value="Load" onclick="tester.loadTestXml()"/><br />
-                  </td>
-                </tr>
-                <tr>
-                  <td class="testlabel">
-                    <label for="selTestCase">TestCase</label>
-                  </td>
-                  <td>
-                    <select name="selTestCase" id="selTestCase" onchange="tester.loadTestCase()">
-                      <option selected="selected">&nbsp;---&nbsp;Select Below&nbsp;---&nbsp;</option>
-                    </select>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td id="controlpanel">
-            <table class="controls">
-              <tbody>
-                <tr>
-                  <td colspan="2">
-                    <label for="selOperation">
-                      Operation(
-                        <img src="./images/unary-geom-function.png"/><span style="color:blue">:unary</span>
-                        /
-                        <img src="./images/binary-geom-function.png"/><span style="color:red">:binary</span>
-                      )
-                    </label>
-                    <select size="17" name="selOperation" id="selOperation" onchange="tester.updateOperation(this.selectedOptions[0].text)">
-                      <optgroup label="Geometry">
-                        <option value="GEOSGeom_clone" class="unary">clone</option>
-                        <option value="GEOSEnvelope" class="unary" selected="selected">envelope</option>
-                        <option value="GEOSHasZ" class="unary">hasZ</option>
-                        <!-- <option value="GEOSHasM" class="unary">hasM</option> -->
-                        <option value="GEOSisEmpty" class="unary">isEmpty</option>
-                        <option value="GEOSLineMerge" class="unary">lineMerge</option>
-                        <option value="GEOSNormalize" class="unary">normalize</option>
-                        <option value="GEOSGeom_setPrecision" class="unary">setPrecision</option>
-                        <option value="GEOSReverse" class="unary">reverse</option>
-                      </optgroup>
-                      <optgroup label="Metric">
-                        <option value="GEOSArea" class="unary">area</option>
-                        <option value="GEOSLength" class="unary">length</option>
-                      </optgroup>
-                      <optgroup label="Validity">
-                        <option value="GEOSisSimple" class="unary">isSimple</option>
-                        <option value="GEOSisValid" class="unary">isValid</option>
-                        <option value="GEOSMakeValid" class="unary">makeValid</option>
-                      </optgroup>
-                      <optgroup label="Construction">
-                        <option value="GEOSBoundary" class="unary">boundary</option>
-                        <option value="GEOSBuffer" class="unary">buffer</option>
-                        <option value="GEOSBufferWithStyle" class="unary">bufferWithStyle</option>
-                        <option value="GEOSOffsetCurve" class="unary">offsetCurve</option>
-                        <option value="GEOSGetCentroid" class="unary">getCentroid</option>
-                        <option value="GEOSConvexHull" class="unary">convexHull</option>
-                        <!-- <option value="GEOSConcaveHull" class="unary">concaveHull</option> -->
-                        <option value="GEOSDensify" class="unary">densify</option>
-                        <option value="GEOSPointOnSurface" class="unary">pointOnSurface</option>
-                        <option value="GEOSLargestEmptyCircle" class="unary">largestEmptyCircle</option>
-                        <option value="GEOSMaximumInscribedCircle" class="unary">maximumInscribedCircle</option>
-                        <option value="GEOSMinimumBoundingCircle" class="unary">minimumBoundingCircle</option>
-                        <option value="GEOSMinimumWidth" class="unary">minimumWidth</option>
-                        <option value="GEOSDelaunayTriangulation" class="unary">delaunayTriangulation</option>
-                        <option value="GEOSConstrainedDelaunayTriangulation" class="unary">constrainedDelaunayTriangulation</option>
-                        <option value="GEOSVoronoiDiagram" class="unary">voronoiDiagram</option>
-                        <!-- <option value="GEOSPolygonize" class="unary">polygonize</option> -->
-                        <!-- <option value="GEOSPolygonize_valid" class="unary">polygonizeValid</option> -->
-                        <option value="GEOSBuildArea" class="unary">buildArea</option>
-                        <option value="GEOSSimplify" class="unary">simplify</option>
-                        <option value="GEOSTopologyPreserveSimplify" class="unary">topologyPreserveSimplify</option>
-                      </optgroup>
-                      <optgroup label="Distance">
-                        <option value="GEOSDistance" class="binary">distance</option>
-                        <option value="GEOSNearestPoints" class="binary">nearestPoints</option>
-                        <option value="GEOSFrechetDistance" class="binary">frechetDistance</option>
-                        <option value="GEOSHausdorffDistance" class="binary">hausdorffDistance</option>
-                      </optgroup>
-                      <optgroup label="Spatial Relationship">
-                        <option value="GEOSContains" class="binary">contains</option>
-                        <option value="GEOSCoveredBy" class="binary">coveredBy</option>
-                        <option value="GEOSCovers" class="binary">covers</option>
-                        <option value="GEOSCrosses" class="binary">crosses</option>
-                        <option value="GEOSDisjoint" class="binary">disjoint</option>
-                        <option value="GEOSEquals" class="binary">equals</option>
-                        <option value="GEOSEqualsExact" class="binary">equalsExact</option>
-                        <option value="GEOSIntersects" class="binary">intersects</option>
-                        <option value="GEOSOverlaps" class="binary">overlaps</option>
-                        <option value="GEOSTouches" class="binary">touches</option>
-                        <option value="GEOSWithin" class="binary">within</option>
-                        <!-- <option value="GEOSRelate" class="binary">relate</option> -->
-                        <option value="GEOSRelatePattern" class="binary">relatePattern</option>
-                        <option value="GEOSRelateBoundaryNodeRule" class="binary">relateBoundaryNodeRule</option>
-                      </optgroup>
-                      <optgroup label="Overlay">
-                        <option value="GEOSDifference" class="binary">difference</option>
-                        <option value="GEOSIntersection" class="binary">intersection</option>
-                        <option value="GEOSSymDifference" class="binary">symDifference</option>
-                        <option value="GEOSUnaryUnion" class="unary">unaryUnion</option>
-                        <option value="GEOSUnion" class="binary">union</option>
-                        <option value="GEOSNode" class="unary">node</option>
-                        <option value="GEOSClipByRect" class="binary">clipByRect</option>
-                      </optgroup>
-                      <optgroup label="Linear Referencing">
-                        <option value="GEOSInterpolate" class="unary">interpolate</option>
-                        <option value="GEOSProject" class="binary">project</option>
-                      </optgroup>
-                      <optgroup label="Coverage">
-                        <option value="GEOSCoverageUnion" class="binary">coverageUnion</option>
-                      </optgroup>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2" style="text-align: center">
-                    <input type="button" id="btnCompute" value="Compute" onclick="tester.compute()" />
-                  </td>
-                </tr>
-                <tr>
-                  <td class="arglabel">
-                    <label for="txtArg1" id="lblArg1">Argument1</label>
-                  </td>
-                  <td class="argtext">
-                    <input type="text" id="txtArg1" class="txtArg" />
-                  </td>
-                </tr>
-                <tr>
-                  <td class="arglabel">
-                    <label for="txtArg2" id="lblArg2">Argument2</label>
-                  </td>
-                  <td class="argtext">
-                    <input type="text" id="txtArg2" class="txtArg" />
-                  </td>
-                </tr>
-                <tr>
-                  <td class="arglabel">
-                    <label for="txtArg3" id="lblArg3">Argument3</label>
-                  </td>
-                  <td class="argtext">
-                    <input type="text" id="txtArg3" class="txtArg" />
-                  </td>
-                </tr>
-                <tr>
-                  <td class="arglabel">
-                    <label for="txtArg4" id="lblArg4">Argument4</label>
-                  </td>
-                  <td class="argtext">
-                    <input type="text" id="txtArg4" class="txtArg" />
-                  </td>
-                </tr>
-                <tr>
-                  <td class="arglabel">
-                    <label for="txtArg5" id="lblArg5">Argument5</label>
-                  </td>
-                  <td class="argtext">
-                    <input type="text" id="txtArg5" class="txtArg" />
-                  </td>
-                </tr>
-                <tr>
-                  <td class="arglabel">
-                    <label for="txtArg6" id="lblArg6">Argument6</label>
-                  </td>
-                  <td class="argtext">
-                    <input type="text" id="txtArg6" class="txtArg" />
-                  </td>
-                </tr>
-                <tr>
-                  <td id="option" colspan="2">
-                    <input type="checkbox" id="chkDisplay" name="chkDisplay" checked="checked"
-                      onclick="tester.displayInputGeometries(this.checked)"
-                    />
-                    <label for="chkDisplay">Display Input Geometries</label>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-          <td id="mappanel">
-            <div id="map"></div>
-          </td>
-        </tr>
-        <tr>
-          <td id="iopanel" colspan="2">
-            <table class="controls">
-              <tbody>
-                <tr class="io">
-                  <td class="iolabel">
-                    <input type="radio" name="inputtype" id="radA" value="a" checked="checked"
-                      onclick="tester.updateInput()"
-                    />
-                    <label for="radA" id="lblA">A</label><br />
-                    <input type="radio" name="inputtype" id="radB" value="b"
-                      onclick="tester.updateInput()"
-                    />
-                    <label for="radB" id="lblB">B</label><br />
-                  </td>
-                  <td class="iotext">
-                    <textarea id="txtInput"></textarea>
-                  </td>
-                  <td class="iobutton">
-                    <input type="button" id="btnClearInput" value="Clear"
-                      onclick="tester.clearInput()"
-                    /><br />
-                    <input type="button" id="btnLoadInput" value="Load"
-                      onclick="tester.loadInput()"
-                    />
-                  </td>
-                </tr>
-                <tr class="io">
-                  <td class="iolabel">
-                    <input type="radio" name="outputtype" id="radResult" value="result" checked="checked"
-                      onclick="tester.updateOutput()"
-                    />
-                    <label for="radResult" id="lblResult">Result</label><br />
-                    <input type="radio" name="outputtype" id="radExpected" value="expected"
-                      onclick="tester.updateOutput()"
-                    />
-                    <label for="radExpected" id="lblExpected">Expected</label><br />
-                  </td>
-                  <td class="iotext">
-                    <textarea id="txtOutput"></textarea>
-                  </td>
-                  <td class="iobutton">
-                    <input type="button" id="btnClearOutput" value="Clear"
-                      onclick="tester.clearOutput()"
-                    /><br />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="main">
+      <div class="top">
+        <div>
+          <label for="selTestXml">TestXml</label>
+          <select name="selTestXml" id="selTestXml"></select>
+          <input type="button" id="btnLoad" value="Load" onclick="tester.loadTestXml()"/>
+        </div>
+        <div>
+          <label for="selTestCase">TestCase</label>
+          <select name="selTestCase" id="selTestCase" onchange="tester.loadTestCase()">
+            <option selected="selected">---&nbsp;Select Below&nbsp;---</option>
+          </select>
+        </div>
+      </div>
+      <div class="left">
+        <div class="operation">
+          <label for="selOperation">
+            Operation
+            <!--
+            (
+              <img src="./images/unary-geom-function.png"/><span style="color:blue">:unary</span>
+              /
+              <img src="./images/binary-geom-function.png"/><span style="color:red">:binary</span>
+            )
+            -->
+          </label>
+          <select size="17" name="selOperation" id="selOperation" onchange="tester.updateOperation(this.selectedOptions[0].text)">
+            <optgroup label="Geometry">
+              <option value="GEOSGeom_clone" class="unary">clone</option>
+              <option value="GEOSEnvelope" class="unary" selected="selected">envelope</option>
+              <option value="GEOSHasZ" class="unary">hasZ</option>
+              <!-- <option value="GEOSHasM" class="unary">hasM</option> -->
+              <option value="GEOSisEmpty" class="unary">isEmpty</option>
+              <option value="GEOSLineMerge" class="unary">lineMerge</option>
+              <option value="GEOSNormalize" class="unary">normalize</option>
+              <option value="GEOSGeom_setPrecision" class="unary">setPrecision</option>
+              <option value="GEOSReverse" class="unary">reverse</option>
+            </optgroup>
+            <optgroup label="Metric">
+              <option value="GEOSArea" class="unary">area</option>
+              <option value="GEOSLength" class="unary">length</option>
+            </optgroup>
+            <optgroup label="Validity">
+              <option value="GEOSisSimple" class="unary">isSimple</option>
+              <option value="GEOSisValid" class="unary">isValid</option>
+              <option value="GEOSMakeValid" class="unary">makeValid</option>
+            </optgroup>
+            <optgroup label="Construction">
+              <option value="GEOSBoundary" class="unary">boundary</option>
+              <option value="GEOSBuffer" class="unary">buffer</option>
+              <option value="GEOSBufferWithStyle" class="unary">bufferWithStyle</option>
+              <option value="GEOSOffsetCurve" class="unary">offsetCurve</option>
+              <option value="GEOSGetCentroid" class="unary">getCentroid</option>
+              <option value="GEOSConvexHull" class="unary">convexHull</option>
+              <!-- <option value="GEOSConcaveHull" class="unary">concaveHull</option> -->
+              <option value="GEOSDensify" class="unary">densify</option>
+              <option value="GEOSPointOnSurface" class="unary">pointOnSurface</option>
+              <option value="GEOSLargestEmptyCircle" class="unary">largestEmptyCircle</option>
+              <option value="GEOSMaximumInscribedCircle" class="unary">maximumInscribedCircle</option>
+              <option value="GEOSMinimumBoundingCircle" class="unary">minimumBoundingCircle</option>
+              <option value="GEOSMinimumWidth" class="unary">minimumWidth</option>
+              <option value="GEOSDelaunayTriangulation" class="unary">delaunayTriangulation</option>
+              <option value="GEOSConstrainedDelaunayTriangulation" class="unary">constrainedDelaunayTriangulation</option>
+              <option value="GEOSVoronoiDiagram" class="unary">voronoiDiagram</option>
+              <!-- <option value="GEOSPolygonize" class="unary">polygonize</option> -->
+              <!-- <option value="GEOSPolygonize_valid" class="unary">polygonizeValid</option> -->
+              <option value="GEOSBuildArea" class="unary">buildArea</option>
+              <option value="GEOSSimplify" class="unary">simplify</option>
+              <option value="GEOSTopologyPreserveSimplify" class="unary">topologyPreserveSimplify</option>
+            </optgroup>
+            <optgroup label="Distance">
+              <option value="GEOSDistance" class="binary">distance</option>
+              <option value="GEOSNearestPoints" class="binary">nearestPoints</option>
+              <option value="GEOSFrechetDistance" class="binary">frechetDistance</option>
+              <option value="GEOSHausdorffDistance" class="binary">hausdorffDistance</option>
+            </optgroup>
+            <optgroup label="Spatial Relationship">
+              <option value="GEOSContains" class="binary">contains</option>
+              <option value="GEOSCoveredBy" class="binary">coveredBy</option>
+              <option value="GEOSCovers" class="binary">covers</option>
+              <option value="GEOSCrosses" class="binary">crosses</option>
+              <option value="GEOSDisjoint" class="binary">disjoint</option>
+              <option value="GEOSEquals" class="binary">equals</option>
+              <option value="GEOSEqualsExact" class="binary">equalsExact</option>
+              <option value="GEOSIntersects" class="binary">intersects</option>
+              <option value="GEOSOverlaps" class="binary">overlaps</option>
+              <option value="GEOSTouches" class="binary">touches</option>
+              <option value="GEOSWithin" class="binary">within</option>
+              <!-- <option value="GEOSRelate" class="binary">relate</option> -->
+              <option value="GEOSRelatePattern" class="binary">relatePattern</option>
+              <option value="GEOSRelateBoundaryNodeRule" class="binary">relateBoundaryNodeRule</option>
+            </optgroup>
+            <optgroup label="Overlay">
+              <option value="GEOSDifference" class="binary">difference</option>
+              <option value="GEOSIntersection" class="binary">intersection</option>
+              <option value="GEOSSymDifference" class="binary">symDifference</option>
+              <option value="GEOSUnaryUnion" class="unary">unaryUnion</option>
+              <option value="GEOSUnion" class="binary">union</option>
+              <option value="GEOSNode" class="unary">node</option>
+              <option value="GEOSClipByRect" class="binary">clipByRect</option>
+            </optgroup>
+            <optgroup label="Linear Referencing">
+              <option value="GEOSInterpolate" class="unary">interpolate</option>
+              <option value="GEOSProject" class="binary">project</option>
+            </optgroup>
+            <optgroup label="Coverage">
+              <option value="GEOSCoverageUnion" class="binary">coverageUnion</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="args">
+          <div class="arg" id="divArg1">
+            <label for="txtArg1" id="lblArg1">Geometry</label>
+            <input type="text" id="txtArg1" />
+          </div>
+          <div class="arg" id="divArg2">
+            <label for="txtArg2" id="lblArg2"></label>
+            <input type="text" id="txtArg2" />
+          </div>
+          <div class="arg" id="divArg3">
+            <label for="txtArg3" id="lblArg3"></label>
+            <input type="text" id="txtArg3" />
+          </div>
+          <div class="arg" id="divArg4">
+            <label for="txtArg4" id="lblArg4"></label>
+            <input type="text" id="txtArg4" />
+          </div>
+          <div class="arg" id="divArg5">
+            <label for="txtArg5" id="lblArg5"></label>
+            <input type="text" id="txtArg5" />
+          </div>
+          <div class="arg" id="divArg6">
+            <label for="txtArg6" id="lblArg6"></label>
+            <input type="text" id="txtArg6" />
+          </div>
+        </div>
+        <div class="compute">
+          <input type="button" id="btnCompute" value="Compute"
+            onclick="tester.compute()" />
+        </div>
+      </div>
+      <div class="right">
+        <div id="map"></div>
+        <div class="map-status">
+          <input type="checkbox" id="chkDisplay" name="chkDisplay" checked="checked"
+            onclick="tester.displayInputGeometries(this.checked)"
+          />
+          <label for="chkDisplay">Display Input Geometries</label>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="io">
+          <div class="iolabel">
+            <div>
+              <input type="radio" name="inputtype" id="radA" value="a" checked="checked"
+                onclick="tester.updateInput()"
+              />
+              <label for="radA" id="lblA">A</label>
+            </div>
+            <div>
+              <input type="radio" name="inputtype" id="radB" value="b"
+                onclick="tester.updateInput()"
+              />
+              <label for="radB" id="lblB">B</label>
+            </div>
+          </div>
+          <div class="iotext">
+            <textarea id="txtInput"></textarea>
+          </div>
+          <div class="iobutton">
+            <div>
+              <input type="button" id="btnClearInput" value="Clear"
+                onclick="tester.clearInput()"
+              />
+            </div>
+            <div>
+              <input type="button" id="btnLoadInput" value="Load"
+                onclick="tester.loadInput()"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="io">
+          <div class="iolabel">
+            <div>
+              <input type="radio" name="outputtype" id="radResult" value="result" checked="checked"
+                onclick="tester.updateOutput()"
+              />
+              <label for="radResult" id="lblResult">Result</label>
+            </div>
+            <div>
+              <input type="radio" name="outputtype" id="radExpected" value="expected"
+                onclick="tester.updateOutput()"
+              />
+              <label for="radExpected" id="lblExpected">Expected</label>
+            </div>
+          </div>
+          <div class="iotext">
+            <textarea id="txtOutput"></textarea>
+          </div>
+          <div class="iobutton">
+            <div>
+              <input type="button" id="btnClearOutput" value="Clear"
+                onclick="tester.clearOutput()"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
