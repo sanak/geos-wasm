@@ -12,7 +12,7 @@
 .left {
   grid-area: left;
   min-width: 230px;
-  max-height: 500px;
+  min-height: 500px;
 }
 .right {
   grid-area: right;
@@ -156,6 +156,9 @@ p {
     grid-template-rows: auto auto 1fr auto;
     grid-gap: 4px;
     height: auto;
+  }
+  .left {
+    min-height: auto;
   }
   .operation {
     display: inline-flex;
